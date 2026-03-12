@@ -190,12 +190,32 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Constellation 2k26. All Systems Nominal.
           </p>
           
-          <div className="glass-premium px-5 py-2.5 rounded-full cursor-pointer hover:bg-white/5 hover:border-fuchsia-500/30 transition-all duration-300 group flex items-center gap-3">
-            <Github size={18} className="text-gray-400 group-hover:text-white transition-colors" />
-            <div className="flex flex-col">
-              <span className="text-[9px] text-fuchsia-400 font-bold tracking-widest uppercase leading-none mb-1">Developed By</span>
-              <span className="text-white text-sm font-heading font-bold leading-none">David Shalom</span>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <a 
+              href="https://github.com/davidShalom-git" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="glass-premium px-5 py-2.5 rounded-full cursor-pointer hover:bg-white/5 hover:border-fuchsia-500/30 transition-all duration-300 group flex items-center gap-3"
+            >
+              <Github size={18} className="text-gray-400 group-hover:text-white transition-colors" />
+              <div className="flex flex-col text-left">
+                <span className="text-[9px] text-fuchsia-400 font-bold tracking-widest uppercase leading-none mb-1">Developer</span>
+                <span className="text-white text-sm font-heading font-bold leading-none">David Shalom</span>
+              </div>
+            </a>
+
+            <a 
+              href="https://github.com/kirthik-nova" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="glass-premium px-5 py-2.5 rounded-full cursor-pointer hover:bg-white/5 hover:border-purple-500/30 transition-all duration-300 group flex items-center gap-3"
+            >
+              <Github size={18} className="text-gray-400 group-hover:text-white transition-colors" />
+              <div className="flex flex-col text-left">
+                <span className="text-[9px] text-purple-400 font-bold tracking-widest uppercase leading-none mb-1">Developer</span>
+                <span className="text-white text-sm font-heading font-bold leading-none">Kirthik</span>
+              </div>
+            </a>
           </div>
         </motion.div>
         

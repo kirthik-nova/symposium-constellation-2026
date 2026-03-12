@@ -3,15 +3,16 @@ import { motion } from 'framer-motion';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 
 const morningSchedule = [
-  { time: "10:00 AM", duration: "1.5 hours", title: "Inauguration Ceremony", venue: "Main Auditorium" },
-  { time: "11:30 AM", duration: "10 mins", title: "Networking & Tea", venue: "Lounge Area" },
-  { time: "11:40 AM", duration: "1.5 hours", title: "Presentia (Slot 1)", venue: "Seminar Hall A" },
+  { time: "09:30 AM", duration: "1 hour", title: "Inauguration Ceremony", venue: "Main Auditorium" },
+  { time: "10:30 AM", duration: "1.5 hours", title: "PPT & Research Track", venue: "Seminar Hall A" },
+  { time: "12:00 PM", duration: "1 hour", title: "Myth Buster Challenge", venue: "Technical Hub" },
 ];
 
 const afternoonSchedule = [
-  { time: "01:30 PM", duration: "1 hour", title: "Lunch Break", venue: "Campus Cafeteria" },
-  { time: "02:30 PM", duration: "1 hour", title: "Presentia (Slot 2)", venue: "Seminar Hall B" },
-  { time: "03:30 PM", duration: "1 hour", title: "Quiz Hust Final", venue: "Computer Labs 1-4" },
+  { time: "01:00 PM", duration: "1 hour", title: "Lunch Break", venue: "Campus Cafeteria" },
+  { time: "02:00 PM", duration: "1.5 hours", title: "Brain Auction & Bidding", venue: "Convention Center" },
+  { time: "03:30 PM", duration: "1 hour", title: "Non-Tech Battlefront", venue: "Open Grounds" },
+  { time: "04:30 PM", duration: "1 hour", title: "Awards & Valedictory", venue: "Main Auditorium" },
 ];
 
 const ScheduleCard = ({ item, type, index }) => (
@@ -111,7 +112,7 @@ const Schedule = () => {
               </div>
               <div className="text-center sm:text-left relative z-10">
                 <h3 className="text-3xl font-black text-white font-heading tracking-tight mb-1">Morning Session</h3>
-                <p className="text-fuchsia-400 text-sm font-mono tracking-widest uppercase font-bold">FEB 13, 2026</p>
+                <p className="text-fuchsia-400 text-sm font-mono tracking-widest uppercase font-bold">APR 02, 2026</p>
               </div>
             </motion.div>
             
@@ -137,7 +138,7 @@ const Schedule = () => {
               </div>
               <div className="text-center sm:text-left relative z-10">
                 <h3 className="text-3xl font-black text-white font-heading tracking-tight mb-1">Afternoon Session</h3>
-                <p className="text-purple-400 text-sm font-mono tracking-widest uppercase font-bold">FEB 13, 2026</p>
+                <p className="text-purple-400 text-sm font-mono tracking-widest uppercase font-bold">APR 02, 2026</p>
               </div>
             </motion.div>
 
