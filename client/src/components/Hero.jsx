@@ -128,9 +128,9 @@ const Hero = ({ hasEntered }) => {
           </motion.div>
 
           {/* 3 ── CONSTELLATION — per-letter stagger */}
-          <h1 className="text-[2.6rem] leading-[1.1] sm:text-5xl md:text-7xl lg:text-[5.5rem]
+          <h1 className="text-[2.1rem] leading-[1.1] sm:text-5xl md:text-7xl lg:text-[5.5rem]
                          font-black text-white font-heading tracking-tight mb-2 sm:mb-3 flex flex-col">
-            <div className="flex overflow-hidden pb-1 sm:pb-2 flex-wrap">
+            <div className="flex flex-nowrap overflow-hidden pb-1 sm:pb-2">
               {text.split('').map((char, i) => (
                 <motion.span
                   key={i}

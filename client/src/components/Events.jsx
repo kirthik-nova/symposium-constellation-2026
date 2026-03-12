@@ -5,6 +5,10 @@ import {
   Gamepad2, Puzzle, Target, ArrowUpRight,
 } from 'lucide-react';
 
+import pptImg from '/PPT.png';
+import mythImg from '/Myth.png';
+import brainImg from '/Brain.png';
+
 /* ─── live width hook ───────────────────────────────────────────── */
 const useWindowWidth = () => {
   const [width, setWidth] = useState(
@@ -21,42 +25,42 @@ const useWindowWidth = () => {
 /* ─── DATA ─────────────────────────────────────────────────────── */
 const techEvents = [
   {
-    id: 1, title: 'Presentia', tag: 'Paper Presentation',
+    id: 1, title: 'PPT', tag: 'Paper Presentation',
     desc: 'Present your research and innovative ideas to industry experts and peers with a polished deck and compelling narrative.',
-    img: 'https://images.unsplash.com/photo-1475503572774-15a45e5d60b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    img: pptImg,
     icon: UserCheck, color: '#e2e8f0', colorRgb: '226,232,240', num: '01',
   },
   {
-    id: 2, title: 'Mind Buzzer', tag: 'Debugging Challenge',
-    desc: 'Debug complex algorithms and find exact outputs under extreme time pressure. Precision meets speed.',
-    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    id: 2, title: 'Myth Buster', tag: 'Technical Analysis',
+    desc: 'Bust common technical myths and prove your engineering logic. Challenge the established norms.',
+    img: mythImg,
     icon: Terminal, color: '#94a3b8', colorRgb: '148,163,184', num: '02',
   },
   {
-    id: 3, title: 'Quiz Hust', tag: 'Technical Quiz',
-    desc: 'Test your technical knowledge across all core computer science domains. Fastest fingers win.',
-    img: 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    id: 3, title: 'Brain Auction', tag: 'Strategy Quiz',
+    desc: 'Bid on technical problems and solve them to win. A unique blend of technical depth and strategic bidding.',
+    img: brainImg,
     icon: Lightbulb, color: '#cbd5e1', colorRgb: '203,213,225', num: '03',
   },
 ];
 
 const nonTechEvents = [
   {
-    id: 4, title: 'Trickster', tag: 'Strategy Game',
-    desc: 'A game of wits and strategy. Outsmart opponents in a battle of minds where every move could be your last.',
-    img: 'https://images.unsplash.com/photo-1611996575749-79a3a250f563?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    id: 4, title: 'Dumb Charades', tag: 'Stage Performance',
+    desc: 'Express yourself without words. A classic game of non-verbal communication and team coordination.',
+    img: '/Dumb.jpeg',
     icon: Target, color: '#e879f9', colorRgb: '232,121,249', num: '01',
   },
   {
-    id: 5, title: 'Fun & Frustration', tag: 'Physical Challenge',
-    desc: 'Test your patience with simple yet infuriatingly difficult physical challenges. Laugh, rage, and push through to glory.',
-    img: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    id: 5, title: 'Meme It Up', tag: 'Digital Creativity',
+    desc: 'Channel your inner meme lord. Create the most viral technical and college memes to win.',
+    img: '/Meme.png',
     icon: Puzzle, color: '#a78bfa', colorRgb: '167,139,250', num: '02',
   },
   {
-    id: 6, title: 'Mad Ads', tag: 'Creative Stage',
-    desc: 'Combine pure creativity and humor to pitch the wildest fictional products on stage. Think bold, act wilder, win big.',
-    img: 'https://images.unsplash.com/photo-1561654791-035194735c05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    id: 6, title: 'Cook with Friends', tag: 'Team Activity',
+    desc: 'A culinary showdown without the flame. Team up to create the most appetizing preparation with fun ingredients.',
+    img: '/Cook.jpeg',
     icon: Gamepad2, color: '#818cf8', colorRgb: '129,140,248', num: '03',
   },
 ];
