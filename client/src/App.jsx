@@ -21,7 +21,7 @@ function App() {
 
   // After preloader exits, start entry sequence
   const handlePreloaderComplete = (audio) => {
-    audioRef.current = audio;
+    audioRef.current = audio
     setLoading(false);  
     // Small tick so the DOM settles before animations fire
     setTimeout(() => setHasEntered(true), 100);
