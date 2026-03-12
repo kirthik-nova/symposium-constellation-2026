@@ -14,11 +14,11 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '#' },
-    { name: 'Events', href: '#events' },
-    { name: 'Schedule', href: '#schedule' },
-    { name: 'Track Ticket', href: '#track' },
-    { name: 'About', href: '#about' },
+    { name: 'Home', href: '/home' },
+    { name: 'Events', href: '/home#events' },
+    { name: 'Schedule', href: '/home#schedule' },
+    { name: 'Track Ticket', href: '/home#track' },
+    { name: 'About', href: '/home#about' },
   ];
 
   return (
@@ -51,7 +51,7 @@ const Navbar = () => {
             ))}
           </ul>
           
-          <a href="#register" className="group relative px-6 py-2.5 rounded-full bg-white text-black font-bold text-sm overflow-hidden flex items-center gap-2 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-shadow">
+          <a href="/home#register" className="group relative px-6 py-2.5 rounded-full bg-white text-black font-bold text-sm overflow-hidden flex items-center gap-2 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-shadow">
             <span className="relative z-10">Register Now</span>
             <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
             <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -80,7 +80,7 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
-          <a href="#register" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-3 rounded-xl bg-white text-black text-center font-bold text-base mt-2 shadow-[0_0_20px_rgba(255,255,255,0.15)] active:scale-95 transition-transform">
+          <a href="/home#register" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-3 rounded-xl bg-white text-black text-center font-bold text-base mt-2 shadow-[0_0_20px_rgba(255,255,255,0.15)] active:scale-95 transition-transform">
             Register Now
           </a>
         </div>

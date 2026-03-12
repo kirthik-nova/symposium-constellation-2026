@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymXgM7zuLy0HSViU_X3inVHFJHKyl_Z0qrW7Pa0BIjC6Ny0WI8rvY9sagZYTg-4AoZnw/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEyH3Zn0RItAMMoQmufFsK0bgboujjPGZSj93dgut4k3HL_Z-ESO11m-Oq39UU2ylq/exec";
 
 const TicketTracker = ({ isOpen, onClose }) => {
   const [regId, setRegId] = useState("");
@@ -131,7 +131,7 @@ const TicketTracker = ({ isOpen, onClose }) => {
                         <p className="text-xs text-gray-500 font-mono tracking-widest">{ticketData.regId}</p>
                       </div>
                       <div className="bg-white p-2 rounded-xl" ref={qrRef}>
-                        <QRCodeCanvas value={`https://constellation2k26.com/ticket?id=${ticketData.regId}`} size={80} level="M" />
+                        <QRCodeCanvas value={`https://constellation2k26.vercel.app/ticket?id=${ticketData.regId}`} size={80} level="M" />
                       </div>
                     </div>
 
