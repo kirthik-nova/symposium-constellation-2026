@@ -21,7 +21,7 @@ const IS_REGISTRATION_OPEN = true; // Toggle for testing
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
   phone: z.string().min(10, "Phone number too short").max(15, "Phone number too long").regex(/^[\d+\-\s]*$/, "Invalid characters in phone number"),
-  teamSize: z.enum(["2", "3", "4"], { required_error: "Select team size" }),
+  teamSize: z.enum(["1", "2", "3", "4"], { required_error: "Select team size" }),
   teamMembers: z.string().min(3, "At least one team member name is required"),
   college: z.string().min(2, "College Name is required"),
   department: z.string().min(2, "Department is required"),
@@ -65,6 +65,17 @@ const formSchema = z.object({
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Screenshot Link is required", path: ["screenshotLink"] });
       }
   }
+
+  // Arunai-Only Restriction for Non-Tech
+  if (data.nonTechEvents && data.nonTechEvents.length > 0) {
+      if (!data.college || !data.college.toLowerCase().includes("arunai")) {
+          ctx.addIssue({ 
+            code: z.ZodIssueCode.custom, 
+            message: "Non-Technical events are exclusive to Arunai Engineering College students.", 
+            path: ["nonTechEvents"] 
+          });
+      }
+  }
 });
 
 const TECH_EVENTS = ["Presentia", "Mind Buzzer", "Quiz Hust"];
@@ -89,6 +100,72 @@ const InputField = React.forwardRef(({ label, error, required, icon: Icon, ...pr
   </div>
 ));
 InputField.displayName = "InputField";
+
+const SelectField = ({ label, value, onChange, options, error, icon: Icon, required, placeholder = "Select option" }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) setIsOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedOption = options.find(opt => opt.value === value);
+
+  return (
+    <div className="space-y-1.5 w-full relative" ref={containerRef}>
+      <label className="flex items-center text-sm font-semibold text-gray-300">
+        {Icon && <Icon size={14} className="mr-2 text-fuchsia-400" />}
+        {label} {required && <span className="text-red-400 ml-1">*</span>}
+      </label>
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full bg-white/5 border backdrop-blur-md rounded-xl px-4 py-3.5 text-white flex items-center justify-between cursor-pointer transition-all duration-300
+          ${isOpen ? 'border-fuchsia-500 ring-1 ring-fuchsia-500 bg-white/10' : 'border-white/10 hover:border-white/20 hover:bg-white/10'}
+          ${error ? 'border-red-500/50' : ''}`}
+      >
+        <span className={selectedOption ? "text-white" : "text-white/20"}>
+          {selectedOption ? selectedOption.label : placeholder}
+        </span>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }}>
+          <Info size={14} className="text-gray-500" />
+        </motion.div>
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            className="absolute z-[120] w-full mt-2 bg-black/90 border border-white/10 rounded-xl overflow-hidden shadow-2xl backdrop-blur-xl"
+          >
+            <div className="max-h-[250px] overflow-y-auto custom-scrollbar flex flex-col">
+              {options.map((opt) => (
+                <div
+                  key={opt.value}
+                  onClick={() => {
+                    onChange(opt.value);
+                    setIsOpen(false);
+                  }}
+                  className={`px-4 py-3 text-sm cursor-pointer transition-colors flex items-center justify-between
+                    ${value === opt.value ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                >
+                  <span className="font-medium">{opt.label}</span>
+                  {value === opt.value && <CheckCircle size={14} />}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {error && <p className="text-xs text-red-400 mt-1 pl-1 flex items-center gap-1"><Info size={10} /> {error}</p>}
+    </div>
+  );
+};
 
 const SectionHeading = ({ icon: Icon, title, subtitle }) => (
   <div className="mb-6">
@@ -124,7 +201,7 @@ const RegistrationContent = () => {
     defaultValues: {
       techEvents: [], nonTechEvents: [], paymentMode: "OFFLINE",
       pptTitle: "", pptLink: "", transactionId: "", name: "", email: "",
-      phone: "", teamSize: "2", teamMembers: "", college: "",
+      phone: "", teamSize: "1", teamMembers: "", college: "",
       department: "", year: "", collegeIdLink: "", food: "Veg"
     },
   });
@@ -136,8 +213,9 @@ const RegistrationContent = () => {
   const isPPT = techEvents.includes("Presentia");
   const teamSize = watch("teamSize");
   
-  const totalHead = parseInt(teamSize || "2");
-  const totalPrice = totalHead * 200;
+  const totalHead = parseInt(teamSize || "1");
+  const basePrice = totalHead * 100;
+  const totalPrice = paymentMode === "OFFLINE" ? basePrice + 50 : basePrice;
 
   useEffect(() => { if (isPPT) setShowDomainInfo(true); }, [isPPT]);
 
@@ -152,6 +230,14 @@ const RegistrationContent = () => {
   };
 
   const toggleNonTech = (event) => {
+    const college = getValues("college");
+    if (!college || !college.toLowerCase().includes("arunai")) {
+      return toast.error("Non-Technical events are exclusive to Arunai Engineering College participants.", {
+        description: "Only internal students from our base can participate in these battlefronts.",
+        duration: 4000
+      });
+    }
+
     const current = getValues("nonTechEvents") || [];
     if (current.includes(event)) {
       setValue("nonTechEvents", current.filter(e => e !== event), { shouldValidate: true });
@@ -316,7 +402,7 @@ const RegistrationContent = () => {
         )}
 
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }} transition={{ delay: 0.1 }}>
-          <form onSubmit={handleSubmit(onSubmit, (err) => { toast.error("Please fill in all required fields correctly."); })} className="glass-premium rounded-[2.5rem] p-6 sm:p-10 md:p-14 border-white/10 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+          <form onSubmit={handleSubmit(onSubmit, (err) => { toast.error("Please fill in all required fields correctly."); })} className="glass-premium rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-10 md:p-14 border-white/10 shadow-2xl relative overflow-hidden backdrop-blur-xl">
             
             {/* Info Box */}
             <div className="bg-blue-500/10 border border-blue-500/20 p-4 sm:p-5 rounded-2xl flex items-start gap-4 mb-12 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
@@ -337,16 +423,21 @@ const RegistrationContent = () => {
                   
                   <div className="md:col-span-2 space-y-3">
                     <label className="text-sm font-semibold text-gray-300">Squad Size <span className="text-red-400">*</span></label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      {["2", "3", "4"].map((size) => (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {[
+                        { val: "1", label: "Solo" },
+                        { val: "2", label: "Duo" },
+                        { val: "3", label: "Trio" },
+                        { val: "4", label: "Squad" }
+                      ].map((type) => (
                         <div 
-                          key={size} 
-                          onClick={() => setValue("teamSize", size)}
-                          className={`cursor-pointer border px-5 py-4 rounded-xl flex items-center justify-between transition-all duration-300 
-                            ${teamSize === size ? 'bg-fuchsia-500/20 border-fuchsia-500 text-fuchsia-100 shadow-[0_0_15px_rgba(232,61,232,0.2)]' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'}`}
+                          key={type.val} 
+                          onClick={() => setValue("teamSize", type.val)}
+                          className={`cursor-pointer border px-4 py-4 rounded-xl flex flex-col items-center justify-center gap-1 transition-all duration-300 
+                            ${teamSize === type.val ? 'bg-fuchsia-500/20 border-fuchsia-500 text-fuchsia-100 shadow-[0_0_15px_rgba(232,61,232,0.2)]' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'}`}
                         >
-                          <span className="font-bold">{size} Operators</span>
-                          <span className={`text-[10px] font-mono tracking-widest px-2 py-1 rounded bg-black/50 ${teamSize === size ? 'text-fuchsia-400' : 'text-gray-500'}`}>₹{size * 200}</span>
+                          <span className="font-bold">{type.label}</span>
+                          <span className={`text-[10px] font-mono tracking-widest px-2 py-0.5 rounded bg-black/50 ${teamSize === type.val ? 'text-fuchsia-400' : 'text-gray-500'}`}>₹{parseInt(type.val) * 100}</span>
                         </div>
                       ))}
                     </div>
@@ -358,13 +449,16 @@ const RegistrationContent = () => {
 
                   <InputField label="Comms Line (Phone)" required {...register("phone")} placeholder="+91 98765 43210" error={errors.phone?.message} />
                   
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-gray-300">Ration Preference <span className="text-red-400">*</span></label>
-                    <select {...register("food")} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white hover:border-white/20 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 outline-none transition-colors appearance-none">
-                      <option value="Veg">Vegetarian</option>
-                      <option value="Non-Veg">Non-Vegetarian</option>
-                    </select>
-                  </div>
+                  <SelectField 
+                    label="Ration Preference" 
+                    required 
+                    value={watch("food")} 
+                    onChange={(val) => setValue("food", val, { shouldValidate: true })}
+                    options={[
+                      { value: "Veg", label: "Vegetarian" },
+                      { value: "Non-Veg", label: "Non-Vegetarian" }
+                    ]}
+                  />
                 </div>
               </section>
 
@@ -375,16 +469,19 @@ const RegistrationContent = () => {
                   <InputField label="Origin Base (College Name)" required {...register("college")} placeholder="Institute of Technology..." error={errors.college?.message} />
                   <InputField label="Division (Department)" required {...register("department")} placeholder="CSE, IT, ECE..." error={errors.department?.message} />
                   
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-gray-300">Clearance Level (Year) <span className="text-red-400">*</span></label>
-                    <select {...register("year")} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white hover:border-white/20 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 outline-none transition-colors appearance-none">
-                      <option value="I">Freshman (I)</option>
-                      <option value="II">Sophomore (II)</option>
-                      <option value="III">Junior (III)</option>
-                      <option value="IV">Senior (IV)</option>
-                    </select>
-                    {errors.year && <p className="text-xs text-red-500 mt-1 pl-1 flex items-center gap-1"><Info size={10}/> {errors.year.message}</p>}
-                  </div>
+                  <SelectField 
+                    label="Clearance Level (Year)" 
+                    required 
+                    value={watch("year")} 
+                    onChange={(val) => setValue("year", val, { shouldValidate: true })}
+                    error={errors.year?.message}
+                    options={[
+                      { value: "I", label: "Freshman (I)" },
+                      { value: "II", label: "Sophomore (II)" },
+                      { value: "III", label: "Junior (III)" },
+                      { value: "IV", label: "Senior (IV)" }
+                    ]}
+                  />
 
                   <InputField label="ID Card Link (Google Drive)" required {...register("collegeIdLink")} placeholder="https://drive.google.com/..." error={errors.collegeIdLink?.message} />
                 </div>
@@ -484,7 +581,7 @@ const RegistrationContent = () => {
                   </div>
                   <div className="text-left sm:text-right">
                     <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500">₹{totalPrice}</div>
-                    <p className="text-green-400/60 font-mono text-xs mt-1">₹200 Base Rate x {totalHead}</p>
+                    <p className="text-green-400/60 font-mono text-xs mt-1">₹100 Base Rate x {totalHead}</p>
                   </div>
                 </div>
 
@@ -547,13 +644,13 @@ const RegistrationContent = () => {
               {/* Submit CTA */}
               <div className="pt-8 flex justify-center border-t border-white/5 relative z-20">
                 <MagneticButton className="w-full sm:w-auto">
-                  <button type="submit" disabled={isSubmitting} className="group relative w-full sm:min-w-[300px] justify-center px-10 py-5 bg-white text-black font-black text-lg rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] flex items-center gap-3 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100">
+                  <button type="submit" disabled={isSubmitting} className="group relative w-full sm:min-w-[280px] justify-center px-8 py-3.5 sm:py-5 bg-white text-black font-black text-base sm:text-lg rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] flex items-center gap-3 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100">
                     {isSubmitting ? (
-                      <><Loader2 className="w-6 h-6 animate-spin" /> Verifying Credentials...</>
+                      <><Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" /> Verifying...</>
                     ) : (
                       <>
                         <span className="relative z-10">Confirm Registration</span>
-                        <Send size={20} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                        <Send size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
                       </>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-100 to-purple-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -623,7 +720,7 @@ const Registration = ({ isOpen, onClose }) => {
               </button>
             </div>
             
-            <div className="w-full relative z-10 px-0 pb-12 mt-20 lg:mt-0">
+            <div className="w-full relative z-10 px-4 sm:px-6 md:px-0 pb-12 mt-20 lg:mt-0">
               <RegistrationContent />
             </div>
           </motion.div>
