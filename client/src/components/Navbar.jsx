@@ -22,10 +22,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'py-4' : 'py-6'}`}>
-      {/* Premium blur background only when scrolled */}
-      <div className={`absolute inset-0 transition-opacity duration-500 ${isScrolled ? 'bg-[#000000]/70 backdrop-blur-xl border-b border-white/5 opacity-100' : 'opacity-0'}`} />
-
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'py-3 bg-[#000000]/85 backdrop-blur-xl border-b border-white/5 shadow-lg' : 'py-4 bg-[#000000]/20 backdrop-blur-xs'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between relative z-10">
         
         {/* Logo */}
@@ -33,14 +30,14 @@ const Navbar = () => {
           <div className="w-8 h-8 rounded bg-gradient-to-br from-fuchsia-400 to-purple-600 flex items-center justify-center text-black font-bold font-mono text-sm shadow-[0_0_15px_rgba(232,61,232,0.3)]">
             {'>_'}
           </div>
-          <span className="text-white font-heading text-xl font-bold tracking-wide">
+          <span className="text-white font-heading text-lg font-bold tracking-wide">
             Constellation<span className="text-gray-400 font-light ml-0.5">2K26</span>
           </span>
         </a>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-10">
-          <ul className="flex items-center gap-8">
+            <ul className="flex items-center gap-8">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <a 
@@ -72,18 +69,18 @@ const Navbar = () => {
 
       {/* Mobile Nav Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-[#000000]/95 backdrop-blur-xl border-b border-white/10 py-6 px-6 flex flex-col gap-6 shadow-2xl">
+        <div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-2xl border-b border-white/10 py-5 px-6 flex flex-col gap-5 shadow-2xl animate-in fade-in slide-in-from-top-2">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-gray-300 hover:text-white font-medium text-lg"
+              className="text-gray-400 hover:text-white font-medium text-base transition-colors py-1"
             >
               {link.name}
             </a>
           ))}
-          <a href="#register" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-4 rounded-xl bg-white text-black text-center font-bold text-lg mt-4 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+          <a href="#register" onClick={() => setIsMobileMenuOpen(false)} className="w-full py-3 rounded-xl bg-white text-black text-center font-bold text-base mt-2 shadow-[0_0_20px_rgba(255,255,255,0.15)] active:scale-95 transition-transform">
             Register Now
           </a>
         </div>

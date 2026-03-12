@@ -41,9 +41,9 @@ const formSchema = z.object({
   paymentMode: z.string().min(1, "Payment mode is required"),
   transactionId: z.string().optional().or(z.literal('')),
 }).superRefine((data, ctx) => {
-  if (data.techEvents.includes("Presentia")) {
+  if (data.techEvents.includes("PPT")) {
       if (!data.pptTitle || data.pptTitle.length < 2) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Paper Title is required for Presentia", path: ["pptTitle"] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Paper Title is required for PPT", path: ["pptTitle"] });
       }
       if (!data.pptLink || data.pptLink.trim() === "") {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Presentation Link is required", path: ["pptLink"] })
@@ -78,8 +78,8 @@ const formSchema = z.object({
   }
 });
 
-const TECH_EVENTS = ["Presentia", "Mind Buzzer", "Quiz Hust"];
-const NON_TECH_EVENTS = ["Trickster", "Fun & Frustration", "Mad Ads"]; // Updated to match previous Events names!
+const TECH_EVENTS = ["PPT", "Myth Buster", "Brain Auction"];
+const NON_TECH_EVENTS = ["Dumb Charades", "Meme It Up", "Cook with Friends"]; // Updated to match previous Events names!
 
 /* ── UI HELPERS ────────────────────── */
 const InputField = React.forwardRef(({ label, error, required, icon: Icon, ...props }, ref) => (
@@ -210,7 +210,7 @@ const RegistrationContent = () => {
   const techEvents = watch("techEvents");
   const nonTechEvents = watch("nonTechEvents");
   const paymentMode = watch("paymentMode");
-  const isPPT = techEvents.includes("Presentia");
+  const isPPT = techEvents.includes("PPT");
   const teamSize = watch("teamSize");
   
   const totalHead = parseInt(teamSize || "1");
@@ -521,7 +521,7 @@ const RegistrationContent = () => {
                       <div className="p-6 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 backdrop-blur-md relative">
                         <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500 rounded-l-2xl" />
                         <div className="flex justify-between items-center mb-5">
-                          <h4 className="text-cyan-400 font-bold flex items-center gap-2"><FileText size={18}/> Presentia Loadout</h4>
+                          <h4 className="text-cyan-400 font-bold flex items-center gap-2"><FileText size={18}/> PPT Loadout</h4>
                           <button type="button" onClick={() => setShowDomainInfo(!showDomainInfo)} className="text-xs text-cyan-500 hover:text-cyan-300 underline underline-offset-2 flex items-center gap-1">
                             <Info size={12}/> Allowed Domains
                           </button>

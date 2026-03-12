@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Users, Zap } from 'lucide-react';
+import { Sparkles, Users, Zap, X } from 'lucide-react';
 
 const RegistrationProgress = () => {
   const [spotsLeft, setSpotsLeft] = useState(42); // Realistic fake data
@@ -20,10 +20,10 @@ const RegistrationProgress = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div 
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -50, opacity: 0 }}
-          className="w-full bg-gradient-to-r from-fuchsia-600/20 via-violet-600/20 to-blue-600/20 backdrop-blur-md border-b border-white/10 py-2 relative z-[70] overflow-hidden"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          className="w-full bg-black/40 backdrop-blur-md border-b border-white/5 py-1.5 relative overflow-hidden"
         >
           {/* Animated Glow Line */}
           <motion.div 
@@ -64,6 +64,13 @@ const RegistrationProgress = () => {
                 <Zap size={10} className="text-fuchsia-400 fill-fuchsia-400" />
                 <span className="text-[9px] font-black text-white italic tracking-tighter uppercase font-heading">Live</span>
               </div>
+
+              <button 
+                onClick={() => setIsVisible(false)}
+                className="p-1 hover:bg-white/10 rounded-full text-gray-500 hover:text-white transition-colors ml-2"
+              >
+                <X size={14} />
+              </button>
             </div>
           </div>
         </motion.div>
