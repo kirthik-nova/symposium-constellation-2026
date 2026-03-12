@@ -190,32 +190,52 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Constellation 2k26. All Systems Nominal.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <a 
+          <div className="flex flex-col sm:flex-row items-stretch gap-6">
+            {/* David Shalom - Highlighted Card */}
+            <motion.a 
               href="https://github.com/davidShalom-git" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="glass-premium px-5 py-2.5 rounded-full cursor-pointer hover:bg-white/5 hover:border-fuchsia-500/30 transition-all duration-300 group flex items-center gap-3"
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="relative group p-4 rounded-2xl bg-fuchsia-500/5 border border-fuchsia-500/20 backdrop-blur-xl overflow-hidden shadow-[0_0_20px_rgba(232,61,232,0.1)] hover:shadow-[0_0_40px_rgba(232,61,232,0.3)] transition-all duration-500"
             >
-              <Github size={18} className="text-gray-400 group-hover:text-white transition-colors" />
-              <div className="flex flex-col text-left">
-                <span className="text-[9px] text-fuchsia-400 font-bold tracking-widest uppercase leading-none mb-1">Developer</span>
-                <span className="text-white text-sm font-heading font-bold leading-none">David Shalom</span>
+              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-400 shadow-[0_0_15px_rgba(232,61,232,0.2)] group-hover:scale-110 transition-transform duration-500">
+                  <Github size={24} />
+                </div>
+                <div className="flex flex-col items-start pr-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] text-fuchsia-400 font-black tracking-[0.2em] uppercase px-2 py-0.5 rounded bg-fuchsia-400/10 border border-fuchsia-400/20">Lead Architect</span>
+                  </div>
+                  <span className="text-white text-lg font-heading font-black tracking-tight leading-tight">David Shalom</span>
+                  <span className="text-gray-500 text-[10px] font-mono mt-1">@davidShalom-git</span>
+                </div>
               </div>
-            </a>
+            </motion.a>
 
-            <a 
+            {/* Kirthik - Highlighted Card */}
+            <motion.a 
               href="https://github.com/kirthik-nova" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="glass-premium px-5 py-2.5 rounded-full cursor-pointer hover:bg-white/5 hover:border-purple-500/30 transition-all duration-300 group flex items-center gap-3"
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="relative group p-4 rounded-2xl bg-purple-500/5 border border-purple-500/20 backdrop-blur-xl overflow-hidden shadow-[0_0_20px_rgba(138,43,226,0.1)] hover:shadow-[0_0_40px_rgba(138,43,226,0.3)] transition-all duration-500"
             >
-              <Github size={18} className="text-gray-400 group-hover:text-white transition-colors" />
-              <div className="flex flex-col text-left">
-                <span className="text-[9px] text-purple-400 font-bold tracking-widest uppercase leading-none mb-1">Developer</span>
-                <span className="text-white text-sm font-heading font-bold leading-none">Kirthik</span>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 shadow-[0_0_15px_rgba(138,43,226,0.2)] group-hover:scale-110 transition-transform duration-500">
+                  <Github size={24} />
+                </div>
+                <div className="flex flex-col items-start pr-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] text-purple-400 font-black tracking-[0.2em] uppercase px-2 py-0.5 rounded bg-purple-400/10 border border-purple-400/20">Core Interface</span>
+                  </div>
+                  <span className="text-white text-lg font-heading font-black tracking-tight leading-tight">Kirthik</span>
+                  <span className="text-gray-500 text-[10px] font-mono mt-1">@kirthik-nova</span>
+                </div>
               </div>
-            </a>
+            </motion.a>
           </div>
         </motion.div>
         
