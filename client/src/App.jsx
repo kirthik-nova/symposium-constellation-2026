@@ -11,12 +11,15 @@ import Footer from './components/Footer';
 import CountdownPoster from './components/CountdownPoster';
 import Preloader from './components/Preloader';
 import Registration from './components/Registration';
+import TicketTracker from './components/TicketTracker';
+import RegistrationProgress from './components/RegistrationProgress';
 import { useEffect, useRef, useState } from 'react';
 
 function App() {
   const [loading, setLoading]     = useState(true);
   const [hasEntered, setHasEntered] = useState(false);
   const [isRegOpen, setIsRegOpen] = useState(false);
+  const [isTrackerOpen, setIsTrackerOpen] = useState(false);
   const audioRef = useRef(null);
 
   // After preloader exits, start entry sequence
@@ -71,6 +74,11 @@ function App() {
         setIsRegOpen(true);
         return;
       }
+      if (href === '#track') {
+        e.preventDefault();
+        setIsTrackerOpen(true);
+        return;
+      }
       if (href?.startsWith('#')) {
         e.preventDefault();
         document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -92,6 +100,9 @@ function App() {
       {/* Only mount page content after preloader is fully gone */}
       {!loading && (
         <div className="relative">
+          {/* Live Progress Ticker */}
+          {hasEntered && <RegistrationProgress />}
+
           {/* Permanent backgrounds */}
           <NetworkBackground />
           <ParticleBackground />
@@ -115,6 +126,7 @@ function App() {
             <Events />
             <Schedule />
             <Registration isOpen={isRegOpen} onClose={() => setIsRegOpen(false)} />
+            <TicketTracker isOpen={isTrackerOpen} onClose={() => setIsTrackerOpen(false)} />
             <About />
           </main>
 
