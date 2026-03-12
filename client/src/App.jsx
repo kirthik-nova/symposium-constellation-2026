@@ -12,6 +12,7 @@ import CountdownPoster from './components/CountdownPoster';
 import Preloader from './components/Preloader';
 import Registration from './components/Registration';
 import TicketTracker from './components/TicketTracker';
+import TicketPage from './components/TicketPage';
 import UnderConstruction from './components/UnderConstruction';
 import { Routes, Route } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
@@ -62,20 +63,25 @@ const MainPage = () => {
       const target = e.target.closest('a');
       if (!target) return;
       const href = target.getAttribute('href');
-      if (href === '#register') {
+      if (href === '#register' || href === '/home#register') {
         e.preventDefault();
         setIsRegOpen(true);
         return;
       }
-      if (href === '#track') {
+      if (href === '#track' || href === '/home#track') {
         e.preventDefault();
         setIsTrackerOpen(true);
         return;
       }
-      if (href?.startsWith('#')) {
-        e.preventDefault();
-        const el = document.querySelector(href);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (href?.includes('#') && !href.startsWith('http')) {
+        const hash = href.split('#')[1];
+        if (hash && !['register', 'track'].includes(hash)) {
+          const el = document.getElementById(hash);
+          if (el) {
+            e.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
       }
     };
     document.addEventListener('click', handleAnchorClick);
@@ -126,6 +132,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<UnderConstruction />} />
       <Route path="/home" element={<MainPage />} />
+      <Route path="/ticket" element={<TicketPage />} />
     </Routes>
   );
 };

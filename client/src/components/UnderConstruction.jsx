@@ -66,7 +66,32 @@ const UnderConstruction = () => {
             ))}
         </div>
 
-        
+        {/* Scannable QR Code Section */}
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.8 }}
+            className="flex flex-col items-center gap-4 py-8"
+        >
+            <div className="relative group">
+                {/* Glow behind QR */}
+                <div className="absolute inset-0 bg-fuchsia-500/20 blur-xl group-hover:bg-fuchsia-500/40 transition-all duration-500 rounded-2xl" />
+                <div className="relative p-3 bg-white rounded-2xl shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                    <img 
+                        src="/src/assets/website_qr.png" 
+                        alt="Website QR Code" 
+                        className="w-32 h-32 sm:w-40 sm:h-40"
+                    />
+                </div>
+            </div>
+            <div className="flex items-center gap-3">
+                <div className="w-8 h-px bg-white/10" />
+                <span className="text-[10px] sm:text-xs font-mono tracking-[0.4em] uppercase text-gray-400 group-hover:text-fuchsia-400 transition-colors">
+                    Scan to Visit Constellation
+                </span>
+                <div className="w-8 h-px bg-white/10" />
+            </div>
+        </motion.div>
       </motion.div>
 
       {/* Decorative lines */}

@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import MagneticButton from './MagneticButton'; // Assume we have it! 
 
 // --- CONFIGURATION ---
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymXgM7zuLy0HSViU_X3inVHFJHKyl_Z0qrW7Pa0BIjC6Ny0WI8rvY9sagZYTg-4AoZnw/exec"
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEyH3Zn0RItAMMoQmufFsK0bgboujjPGZSj93dgut4k3HL_Z-ESO11m-Oq39UU2ylq/exec"
 const IS_REGISTRATION_OPEN = true; // Toggle for testing
 
 // =======================
@@ -201,7 +201,7 @@ const RegistrationContent = () => {
     defaultValues: {
       techEvents: [], nonTechEvents: [], paymentMode: "OFFLINE",
       pptTitle: "", pptLink: "", transactionId: "", name: "", email: "",
-      phone: "", teamSize: "1", teamMembers: "", college: "",
+      phone: "+91 ", teamSize: "1", teamMembers: "", college: "",
       department: "", year: "", collegeIdLink: "", food: "Veg"
     },
   });
