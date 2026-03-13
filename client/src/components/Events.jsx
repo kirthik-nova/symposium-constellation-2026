@@ -4,6 +4,7 @@ import {
   Terminal, Lightbulb, UserCheck,
   Gamepad2, Puzzle, Target, ArrowUpRight,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import pptImg from '/PPT.png';
 import mythImg from '/Myth.png';
@@ -194,25 +195,29 @@ const HeroCard = ({ event, flip }) => {
             marginBottom: isMobile ? 22 : 32, fontWeight: 300,
           }}>{event.desc}</p>
 
-          <motion.a
-            href="#register" whileHover={{ x: 4 }} transition={{ type: 'spring', stiffness: 400 }}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              width: 'fit-content',
-              padding: isMobile ? '9px 16px' : '12px 24px',
-              borderRadius: 12,
-              border: `1px solid rgba(${event.colorRgb},0.3)`,
-              color: event.color, fontSize: isMobile ? 10 : 13,
-              fontFamily: 'monospace', fontWeight: 700, letterSpacing: '0.08em',
-              textTransform: 'uppercase', textDecoration: 'none',
-              background: `rgba(${event.colorRgb},0.06)`,
-              transition: 'background 0.3s, border-color 0.3s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = `rgba(${event.colorRgb},0.14)`; e.currentTarget.style.borderColor = `rgba(${event.colorRgb},0.6)`; }}
-            onMouseLeave={e => { e.currentTarget.style.background = `rgba(${event.colorRgb},0.06)`; e.currentTarget.style.borderColor = `rgba(${event.colorRgb},0.3)`; }}
+          <motion.div
+            whileHover={{ x: 4 }} transition={{ type: 'spring', stiffness: 400 }}
           >
-            Register Now <ArrowUpRight size={12} />
-          </motion.a>
+            <Link
+              to="/register"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                width: 'fit-content',
+                padding: isMobile ? '9px 16px' : '12px 24px',
+                borderRadius: 12,
+                border: `1px solid rgba(${event.colorRgb},0.3)`,
+                color: event.color, fontSize: isMobile ? 10 : 13,
+                fontFamily: 'monospace', fontWeight: 700, letterSpacing: '0.08em',
+                textTransform: 'uppercase', textDecoration: 'none',
+                background: `rgba(${event.colorRgb},0.06)`,
+                transition: 'background 0.3s, border-color 0.3s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = `rgba(${event.colorRgb},0.14)`; e.currentTarget.style.borderColor = `rgba(${event.colorRgb},0.6)`; }}
+              onMouseLeave={e => { e.currentTarget.style.background = `rgba(${event.colorRgb},0.06)`; e.currentTarget.style.borderColor = `rgba(${event.colorRgb},0.3)`; }}
+            >
+              Register Now <ArrowUpRight size={12} />
+            </Link>
+          </motion.div>
         </div>
       </div>
     </motion.div>
