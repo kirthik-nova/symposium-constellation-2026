@@ -67,10 +67,7 @@ const TicketPage = () => {
             <div className="relative z-10 w-full max-w-2xl">
                 {/* Header Logo */}
                 <div className="flex justify-center mb-8">
-                    <Link to="/home" className="flex items-center gap-2 group">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fuchsia-400 to-purple-600 flex items-center justify-center text-black font-bold font-mono text-lg shadow-[0_0_20px_rgba(232,61,232,0.3)]">
-                            {'>_'}
-                        </div>
+                    <Link to="/" className="flex items-center gap-2 group">
                         <span className="text-white font-heading text-2xl font-bold tracking-tight">Constellation<span className="text-fuchsia-400">2K26</span></span>
                     </Link>
                 </div>
@@ -94,7 +91,7 @@ const TicketPage = () => {
                                 <h2 className="text-2xl font-black text-white">Access Denied</h2>
                                 <p className="text-gray-400 font-light">{error}</p>
                             </div>
-                            <Link to="/home" className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center gap-2">
+                            <Link to="/" className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center gap-2">
                                 <Home size={18} /> Return to Home
                             </Link>
                         </div>
@@ -160,7 +157,7 @@ const TicketPage = () => {
                                         <Download size={18} /> Download Pass
                                     </button>
                                     <Link 
-                                        to="/home" 
+                                        to="/" 
                                         className="flex-1 py-4 bg-white/5 border border-white/10 text-white font-bold uppercase tracking-widest text-sm rounded-2xl hover:bg-white/10 transition-all flex items-center justify-center gap-2"
                                     >
                                         <Home size={18} /> To Hub
