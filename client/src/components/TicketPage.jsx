@@ -57,14 +57,8 @@ const TicketPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#000000] text-white selection:bg-fuchsia-500/30 font-sans p-4 sm:p-8 flex items-center justify-center relative overflow-hidden">
-            <NetworkBackground />
-            <ParticleBackground />
-
-            {/* Ambient Lighting */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-500/10 blur-[150px] rounded-full pointer-events-none" />
-
-            <div className="relative z-10 w-full max-w-2xl">
+        <div className="min-h-screen bg-black text-white selection:bg-fuchsia-500/30 font-sans p-4 sm:p-8 flex items-center justify-center relative">
+            <div className="w-full max-w-2xl relative z-10">
                 {/* Header Logo */}
                 <div className="flex justify-center mb-8">
                     <Link to="/" className="flex items-center gap-2 group">
@@ -72,11 +66,7 @@ const TicketPage = () => {
                     </Link>
                 </div>
 
-                <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="glass-premium rounded-[2.5rem] border-white/10 overflow-hidden shadow-2xl"
-                >
+                <div className="glass-premium rounded-[2.5rem] border-white/10 overflow-hidden shadow-2xl">
                     {loading ? (
                         <div className="py-20 flex flex-col items-center justify-center gap-4">
                             <Loader2 className="animate-spin text-fuchsia-400" size={40} />
@@ -175,7 +165,7 @@ const TicketPage = () => {
                             </div>
                         </div>
                     )}
-                </motion.div>
+                </div>
             </div>
         </div>
     );
