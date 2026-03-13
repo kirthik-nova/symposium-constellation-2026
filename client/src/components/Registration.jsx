@@ -4,9 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toast, Toaster } from 'sonner';
-import { 
-    Loader2, CheckCircle, Download, CreditCard, User, Building, 
-    Laptop, FileText, MessageCircle, Info, CalendarX, MapPin, Sparkles, Send, Upload, X
+import {
+  Loader2, CheckCircle, Download, CreditCard, User, Building,
+  Laptop, FileText, MessageCircle, Info, CalendarX, MapPin, Sparkles, Send, Upload, X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MagneticButton from './MagneticButton'; // Assume we have it! 
@@ -21,60 +21,64 @@ const IS_REGISTRATION_OPEN = true; // Toggle for testing
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
   phone: z.string().min(10, "Phone number too short").max(15, "Phone number too long").regex(/^[\d+\-\s]*$/, "Invalid characters in phone number"),
-  teamSize: z.enum(["1", "2", "3", "4"], { required_error: "Select team size" }),
+  teamSize: z.enum(["2", "3", "4"], { required_error: "Select team size" }),
   teamMembers: z.string().min(3, "At least one team member name is required"),
   college: z.string().min(2, "College Name is required"),
-  department: z.string().min(2, "Department is required"),
+  department: z.string().min(1, "Department is required"),
+  otherDepartment: z.string().optional(),
   year: z.string().min(1, "Year is required"),
-  collegeIdLink: z.string().url("Invalid URL"),
+  collegeIdLink: z.string().min(5, "A valid link (Drive/Cloud) is required"),
   email: z.string().email("Invalid email address"),
   techEvents: z.array(z.string()).refine((val) => val.length > 0, "Select at least one Technical Event"),
   nonTechEvents: z.array(z.string()).max(1, "Only 1 Non-Technical event allowed").optional(),
-  
+
   pptTitle: z.string().optional(),
   pptLink: z.string().optional(),
   food: z.string().optional(),
   payerName: z.string().optional(),
   payerUPI: z.string().optional(),
   screenshotLink: z.string().optional(),
-  
+
   paymentMode: z.string().min(1, "Payment mode is required"),
   transactionId: z.string().optional().or(z.literal('')),
 }).superRefine((data, ctx) => {
+  if (data.department === "Others" && (!data.otherDepartment || data.otherDepartment.trim() === "")) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Please specify your department", path: ["otherDepartment"] });
+  }
   if (data.techEvents.includes("PPT")) {
-      if (!data.pptTitle || data.pptTitle.length < 2) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Paper Title is required for PPT", path: ["pptTitle"] });
-      }
-      if (!data.pptLink || data.pptLink.trim() === "") {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Presentation Link is required", path: ["pptLink"] })
-      }
+    if (!data.pptTitle || data.pptTitle.length < 2) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Paper Title is required for PPT", path: ["pptTitle"] });
+    }
+    if (!data.pptLink || data.pptLink.trim() === "") {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Presentation Link is required", path: ["pptLink"] })
+    }
   }
 
   if (data.paymentMode === "ONLINE") {
-      if (!data.transactionId || data.transactionId.trim() === "") {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Transaction ID is required", path: ["transactionId"] });
-      } else if (!/^\d{12}$/.test(data.transactionId.trim()) && !/^[A-Z0-9]{10,20}$/i.test(data.transactionId.trim())) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid ID. Enter valid 12-digit UTR/Ref Number.", path: ["transactionId"] })
-      }
-      if (!data.payerUPI || data.payerUPI.trim() === "") {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Your UPI ID is required (e.g., name@oksbi)", path: ["payerUPI"] });
-      } else if (!data.payerUPI.includes("@")) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid UPI ID. Must contain '@'", path: ["payerUPI"] });
-      }
-      if (!data.screenshotLink || data.screenshotLink.trim() === "") {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Screenshot Link is required", path: ["screenshotLink"] });
-      }
+    if (!data.transactionId || data.transactionId.trim() === "") {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Transaction ID is required", path: ["transactionId"] });
+    } else if (!/^\d{12}$/.test(data.transactionId.trim()) && !/^[A-Z0-9]{10,20}$/i.test(data.transactionId.trim())) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid ID. Enter valid 12-digit UTR/Ref Number.", path: ["transactionId"] })
+    }
+    if (!data.payerUPI || data.payerUPI.trim() === "") {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Your UPI ID is required (e.g., name@oksbi)", path: ["payerUPI"] });
+    } else if (!data.payerUPI.includes("@")) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid UPI ID. Must contain '@'", path: ["payerUPI"] });
+    }
+    if (!data.screenshotLink || data.screenshotLink.trim() === "") {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Screenshot Link is required", path: ["screenshotLink"] });
+    }
   }
 
   // Arunai-Only Restriction for Non-Tech
   if (data.nonTechEvents && data.nonTechEvents.length > 0) {
-      if (!data.college || !data.college.toLowerCase().includes("arunai")) {
-          ctx.addIssue({ 
-            code: z.ZodIssueCode.custom, 
-            message: "Non-Technical events are exclusive to Arunai Engineering College students.", 
-            path: ["nonTechEvents"] 
-          });
-      }
+    if (!data.college || !data.college.toLowerCase().includes("arunai")) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Non-Technical events are exclusive to Arunai Engineering College students.",
+        path: ["nonTechEvents"]
+      });
+    }
   }
 });
 
@@ -121,7 +125,7 @@ const SelectField = ({ label, value, onChange, options, error, icon: Icon, requi
         {Icon && <Icon size={14} className="mr-2 text-fuchsia-400" />}
         {label} {required && <span className="text-red-400 ml-1">*</span>}
       </label>
-      <div 
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full bg-white/5 border backdrop-blur-md rounded-xl px-4 py-3.5 text-white flex items-center justify-between cursor-pointer transition-all duration-300
           ${isOpen ? 'border-fuchsia-500 ring-1 ring-fuchsia-500 bg-white/10' : 'border-white/10 hover:border-white/20 hover:bg-white/10'}
@@ -137,7 +141,7 @@ const SelectField = ({ label, value, onChange, options, error, icon: Icon, requi
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -201,8 +205,8 @@ const RegistrationContent = () => {
     defaultValues: {
       techEvents: [], nonTechEvents: [], paymentMode: "OFFLINE",
       pptTitle: "", pptLink: "", transactionId: "", name: "", email: "",
-      phone: "+91 ", teamSize: "1", teamMembers: "", college: "",
-      department: "", year: "", collegeIdLink: "", food: "Veg"
+      phone: "+91 ", teamSize: "2", teamMembers: "", college: "",
+      department: "", otherDepartment: "", year: "", collegeIdLink: "", food: "Veg"
     },
   });
 
@@ -212,7 +216,7 @@ const RegistrationContent = () => {
   const paymentMode = watch("paymentMode");
   const isPPT = techEvents.includes("PPT");
   const teamSize = watch("teamSize");
-  
+
   const totalHead = parseInt(teamSize || "1");
   const basePrice = totalHead * 100;
   const totalPrice = paymentMode === "OFFLINE" ? basePrice + 50 : basePrice;
@@ -253,22 +257,23 @@ const RegistrationContent = () => {
     try {
       const payload = {
         regId: "PENDING", name: data.name, email: data.email, phone: data.phone,
-        teamSize: data.teamSize, teamMembers: data.teamMembers, department: data.department,
+        teamSize: data.teamSize, teamMembers: data.teamMembers,
+        department: data.department === "Others" ? data.otherDepartment : data.department,
         college: data.college, year: data.year, collegeIdLink: data.collegeIdLink, food: data.food,
         techEvents: data.techEvents, nonTechEvents: data.nonTechEvents || [],
         pptTitle: isPPT ? data.pptTitle : "", pptLink: isPPT ? data.pptLink : "",
-        paymentMode: data.paymentMode, 
+        paymentMode: data.paymentMode,
         payerName: data.paymentMode === "ONLINE" ? data.payerName : "",
         payerUPI: data.paymentMode === "ONLINE" ? data.payerUPI : "",
         screenshotLink: data.paymentMode === "ONLINE" ? data.screenshotLink : "",
         totalAmount: totalPrice, transactionId: data.paymentMode === "ONLINE" ? data.transactionId : "",
       };
-      
+
       const response = await fetch(APPS_SCRIPT_URL, {
         method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(payload)
       });
       const result = await response.json();
-      
+
       if (result.status === "success") {
         setRegData({ ...payload, regId: result.regId, qrContent: result.qrContent });
         setIsSuccess(true);
@@ -303,7 +308,7 @@ const RegistrationContent = () => {
         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-full max-w-md px-4">
           <div className="glass-premium rounded-[2rem] p-8 sm:p-10 border-fuchsia-500/30 overflow-hidden relative shadow-[0_0_50px_rgba(232,61,232,0.1)]">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-fuchsia-500 to-purple-500" />
-            
+
             <div className="flex flex-col items-center text-center space-y-4 mb-8">
               <div className="p-4 rounded-full bg-green-500/10 border border-green-500/20 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
                 <CheckCircle className="w-12 h-12 text-green-400" />
@@ -326,7 +331,7 @@ const RegistrationContent = () => {
             <div className="grid grid-cols-2 gap-4 text-sm mb-8 bg-black/40 rounded-xl p-4 border border-white/5">
               <div><span className="text-gray-500 text-xs uppercase font-bold block mb-0.5">Name</span><span className="text-white font-medium">{regData.name}</span></div>
               <div><span className="text-gray-500 text-xs uppercase font-bold block mb-0.5">Team Size</span><span className="text-white font-medium">{regData.teamSize} Squad</span></div>
-              <div><span className="text-gray-500 text-xs uppercase font-bold block mb-0.5">Payment</span><span className={`font-mono font-bold ${regData.paymentMode==='ONLINE'?'text-green-400':'text-yellow-400'}`}>{regData.paymentMode}</span></div>
+              <div><span className="text-gray-500 text-xs uppercase font-bold block mb-0.5">Payment</span><span className={`font-mono font-bold ${regData.paymentMode === 'ONLINE' ? 'text-green-400' : 'text-yellow-400'}`}>{regData.paymentMode}</span></div>
             </div>
 
             <div className="flex flex-col gap-3">
@@ -352,7 +357,7 @@ const RegistrationContent = () => {
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-lg px-4">
           <div className="glass-premium rounded-[2rem] p-10 text-center relative overflow-hidden shadow-[0_0_50px_rgba(255,0,0,0.1)]">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500" />
-            
+
             <div className="mx-auto bg-red-500/10 p-5 rounded-full w-fit mb-6 shadow-[0_0_30px_rgba(255,0,0,0.2)]">
               <CalendarX className="w-12 h-12 text-red-500" />
             </div>
@@ -362,18 +367,18 @@ const RegistrationContent = () => {
             </p>
 
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 relative group">
-                <div className="absolute inset-0 bg-fuchsia-500/5 group-hover:bg-fuchsia-500/10 transition-colors duration-500 rounded-2xl pointer-events-none" />
-                <h3 className="text-xl font-bold text-white flex items-center justify-center gap-2 mb-3">
-                    <Sparkles className="w-5 h-5 text-fuchsia-400" /> Final Chance!
-                </h3>
-                <p className="text-gray-400 mb-5">You can still secure your spot by registering directly at the venue baseline.</p>
-                <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-fuchsia-500/20 rounded-full border border-fuchsia-500/30 text-fuchsia-300 font-semibold shadow-[0_0_15px_rgba(232,61,232,0.15)]">
-                    <MapPin className="w-4 h-4" /> On-Spot Registration Available
-                </div>
+              <div className="absolute inset-0 bg-fuchsia-500/5 group-hover:bg-fuchsia-500/10 transition-colors duration-500 rounded-2xl pointer-events-none" />
+              <h3 className="text-xl font-bold text-white flex items-center justify-center gap-2 mb-3">
+                <Sparkles className="w-5 h-5 text-fuchsia-400" /> Final Chance!
+              </h3>
+              <p className="text-gray-400 mb-5">You can still secure your spot by registering directly at the venue baseline.</p>
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-fuchsia-500/20 rounded-full border border-fuchsia-500/30 text-fuchsia-300 font-semibold shadow-[0_0_15px_rgba(232,61,232,0.15)]">
+                <MapPin className="w-4 h-4" /> On-Spot Registration Available
+              </div>
             </div>
 
             <button onClick={() => window.open('https://chat.whatsapp.com/BUvc9J9f2oc5cI5kyAz3NQ', '_blank')} className="w-full h-14 rounded-xl bg-white text-black font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-transform active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                <MessageCircle size={20} /> Override via WhatsApp Community
+              <MessageCircle size={20} /> Override via WhatsApp Community
             </button>
           </div>
         </motion.div>
@@ -387,10 +392,10 @@ const RegistrationContent = () => {
   return (
     <section id="register" className="py-8 sm:py-12 relative z-10">
       <div className="max-w-4xl mx-auto px-5 sm:px-8 relative">
-        
+
         {/* Header - Hidden in Modal to save space on mobile */}
         {!isMobile && (
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }} className="text-center mb-16 hidden md:block">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16 hidden md:block">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase text-fuchsia-400 mb-6">
               <Upload size={12} /> Secure Your Spot
             </div>
@@ -401,16 +406,16 @@ const RegistrationContent = () => {
           </motion.div>
         )}
 
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once:true }} transition={{ delay: 0.1 }}>
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
           <form onSubmit={handleSubmit(onSubmit, (err) => { toast.error("Please fill in all required fields correctly."); })} className="glass-premium rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-10 md:p-14 border-white/10 shadow-2xl relative overflow-hidden backdrop-blur-xl">
-            
+
             {/* Info Box */}
             <div className="bg-blue-500/10 border border-blue-500/20 p-4 sm:p-5 rounded-2xl flex items-start gap-4 mb-12 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
-                <div className="p-3 bg-blue-500/20 rounded-xl shrink-0"><User className="text-blue-400" size={20}/></div>
-                <p className="text-sm sm:text-base text-blue-200 leading-relaxed font-light mt-0.5">
-                    <strong className="font-bold text-white mr-2 tracking-wide">SQUAD PROTOCOL:</strong>
-                    Any <span className="italic">ONE member (Team Leader)</span> can register for the entire squad. Gather your specs and proceed below.
-                </p>
+              <div className="p-3 bg-blue-500/20 rounded-xl shrink-0"><User className="text-blue-400" size={20} /></div>
+              <p className="text-sm sm:text-base text-blue-200 leading-relaxed font-light mt-0.5">
+                <strong className="font-bold text-white mr-2 tracking-wide">SQUAD PROTOCOL:</strong>
+                Any <span className="italic">ONE member (Team Leader)</span> can register for the entire squad. Gather your specs and proceed below.
+              </p>
             </div>
 
             <div className="space-y-16">
@@ -420,18 +425,17 @@ const RegistrationContent = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-7">
                   <InputField label="Full Name / Team Leader" required {...register("name")} placeholder="Cmdr. John Doe" error={errors.name?.message} />
                   <InputField label="Email Address" required {...register("email")} placeholder="john@example.com" error={errors.email?.message} />
-                  
+
                   <div className="md:col-span-2 space-y-3">
                     <label className="text-sm font-semibold text-gray-300">Squad Size <span className="text-red-400">*</span></label>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       {[
-                        { val: "1", label: "Solo" },
                         { val: "2", label: "Duo" },
                         { val: "3", label: "Trio" },
                         { val: "4", label: "Squad" }
                       ].map((type) => (
-                        <div 
-                          key={type.val} 
+                        <div
+                          key={type.val}
                           onClick={() => setValue("teamSize", type.val)}
                           className={`cursor-pointer border px-4 py-4 rounded-xl flex flex-col items-center justify-center gap-1 transition-all duration-300 
                             ${teamSize === type.val ? 'bg-fuchsia-500/20 border-fuchsia-500 text-fuchsia-100 shadow-[0_0_15px_rgba(232,61,232,0.2)]' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'}`}
@@ -448,11 +452,11 @@ const RegistrationContent = () => {
                   </div>
 
                   <InputField label="Comms Line (Phone)" required {...register("phone")} placeholder="+91 98765 43210" error={errors.phone?.message} />
-                  
-                  <SelectField 
-                    label="Ration Preference" 
-                    required 
-                    value={watch("food")} 
+
+                  <SelectField
+                    label="Ration Preference"
+                    required
+                    value={watch("food")}
                     onChange={(val) => setValue("food", val, { shouldValidate: true })}
                     options={[
                       { value: "Veg", label: "Vegetarian" },
@@ -467,12 +471,43 @@ const RegistrationContent = () => {
                 <SectionHeading icon={Building} title="Affiliation" subtitle="Academic origins." />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-7">
                   <InputField label="Origin Base (College Name)" required {...register("college")} placeholder="Institute of Technology..." error={errors.college?.message} />
-                  <InputField label="Division (Department)" required {...register("department")} placeholder="CSE, IT, ECE..." error={errors.department?.message} />
-                  
-                  <SelectField 
-                    label="Clearance Level (Year)" 
-                    required 
-                    value={watch("year")} 
+                  <SelectField
+                    label="Division (Department)"
+                    required
+                    value={watch("department")}
+                    onChange={(val) => setValue("department", val, { shouldValidate: true })}
+                    error={errors.department?.message}
+                    options={[
+                      { value: "CSE", label: "CSE" },
+                      { value: "IT", label: "IT" },
+                      { value: "AIDS", label: "AIDS" },
+                      { value: "AIML", label: "AIML" },
+                      { value: "CYBER", label: "CYBER" },
+                      { value: "EEE", label: "EEE" },
+                      { value: "ECE", label: "ECE" },
+                      { value: "MECH", label: "MECH" },
+                      { value: "CIVIL", label: "CIVIL" },
+                      { value: "BIO TECH", label: "BIO TECH" },
+                      { value: "B.Tech Agriculture", label: "B.Tech Agriculture" },
+                      { value: "BTech Chemical", label: "BTech Chemical" },
+                      { value: "Others", label: "Others (Specify)" }
+                    ]}
+                  />
+
+                  {watch("department") === "Others" && (
+                    <InputField
+                      label="Specify Department"
+                      required
+                      {...register("otherDepartment")}
+                      placeholder="e.g. Biomedical"
+                      error={errors.otherDepartment?.message}
+                    />
+                  )}
+
+                  <SelectField
+                    label="Clearance Level (Year)"
+                    required
+                    value={watch("year")}
                     onChange={(val) => setValue("year", val, { shouldValidate: true })}
                     error={errors.year?.message}
                     options={[
@@ -490,7 +525,7 @@ const RegistrationContent = () => {
               {/* SECTION: Events */}
               <section>
                 <SectionHeading icon={Laptop} title="Event Parameters" subtitle="Select your battlegrounds." />
-                
+
                 {/* Tech Events */}
                 <div className="mb-8">
                   <div className="flex justify-between items-end mb-3">
@@ -511,7 +546,7 @@ const RegistrationContent = () => {
                       )
                     })}
                   </div>
-                  {errors.techEvents && <p className="text-xs text-red-400 mt-2 pl-1 flex items-center gap-1"><Info size={10}/> {errors.techEvents.message}</p>}
+                  {errors.techEvents && <p className="text-xs text-red-400 mt-2 pl-1 flex items-center gap-1"><Info size={10} /> {errors.techEvents.message}</p>}
                 </div>
 
                 {/* PPT Conditonal */}
@@ -521,12 +556,12 @@ const RegistrationContent = () => {
                       <div className="p-6 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 backdrop-blur-md relative">
                         <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500 rounded-l-2xl" />
                         <div className="flex justify-between items-center mb-5">
-                          <h4 className="text-cyan-400 font-bold flex items-center gap-2"><FileText size={18}/> PPT Loadout</h4>
+                          <h4 className="text-cyan-400 font-bold flex items-center gap-2"><FileText size={18} /> PPT Loadout</h4>
                           <button type="button" onClick={() => setShowDomainInfo(!showDomainInfo)} className="text-xs text-cyan-500 hover:text-cyan-300 underline underline-offset-2 flex items-center gap-1">
-                            <Info size={12}/> Allowed Domains
+                            <Info size={12} /> Allowed Domains
                           </button>
                         </div>
-                        
+
                         {/* Domain info toggle */}
                         <AnimatePresence>
                           {showDomainInfo && (
@@ -566,14 +601,14 @@ const RegistrationContent = () => {
                       )
                     })}
                   </div>
-                  {errors.nonTechEvents && <p className="text-xs text-red-400 mt-2 pl-1 flex items-center gap-1"><Info size={10}/> {errors.nonTechEvents.message}</p>}
+                  {errors.nonTechEvents && <p className="text-xs text-red-400 mt-2 pl-1 flex items-center gap-1"><Info size={10} /> {errors.nonTechEvents.message}</p>}
                 </div>
               </section>
 
               {/* SECTION: Payment */}
               <section className="bg-gradient-to-br from-black/50 to-white/[0.02] -mx-6 sm:-mx-10 md:-mx-14 px-6 sm:px-10 md:px-14 py-12 border-t border-white/5">
                 <SectionHeading icon={CreditCard} title="Clearance Funds" subtitle="Payment processing." />
-                
+
                 <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/10 border border-green-500/30 p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                   <div>
                     <h4 className="text-lg font-bold text-white mb-1">Total Fee Assessment</h4>
@@ -590,20 +625,20 @@ const RegistrationContent = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div onClick={() => setValue("paymentMode", "ONLINE")} className={`cursor-pointer p-6 rounded-2xl border transition-all duration-300 flex flex-col items-center justify-center gap-3 text-center
                       ${paymentMode === "ONLINE" ? 'bg-blue-600/10 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.15)] scale-[1.02]' : 'bg-black/40 border-white/10 hover:border-white/20 hover:bg-black/60'}`}>
-                      <div className={`p-4 rounded-full ${paymentMode === "ONLINE" ? 'bg-blue-500/20 text-blue-400' : 'bg-white/5 text-gray-400'}`}><CreditCard size={28}/></div>
+                      <div className={`p-4 rounded-full ${paymentMode === "ONLINE" ? 'bg-blue-500/20 text-blue-400' : 'bg-white/5 text-gray-400'}`}><CreditCard size={28} /></div>
                       <span className={`font-bold tracking-wide ${paymentMode === "ONLINE" ? 'text-blue-200' : 'text-gray-300'}`}>Digital Link (UPI)</span>
                     </div>
 
                     <div onClick={() => setValue("paymentMode", "OFFLINE")} className={`cursor-pointer p-6 rounded-2xl border transition-all duration-300 flex flex-col items-center justify-center gap-3 text-center
                       ${paymentMode === "OFFLINE" ? 'bg-yellow-500/10 border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.15)] scale-[1.02]' : 'bg-black/40 border-white/10 hover:border-white/20 hover:bg-black/60'}`}>
-                      <div className={`p-4 rounded-full ${paymentMode === "OFFLINE" ? 'bg-yellow-500/20 text-yellow-400' : 'bg-white/5 text-gray-400'}`}><Building size={28}/></div>
+                      <div className={`p-4 rounded-full ${paymentMode === "OFFLINE" ? 'bg-yellow-500/20 text-yellow-400' : 'bg-white/5 text-gray-400'}`}><Building size={28} /></div>
                       <div>
                         <span className={`font-bold tracking-wide block ${paymentMode === "OFFLINE" ? 'text-yellow-200' : 'text-gray-300'}`}>On-Grid (Venue)</span>
                         <span className="inline-block mt-2 text-[10px] font-bold tracking-widest uppercase text-red-400 bg-red-400/10 px-2 py-1 rounded border border-red-500/20">+ ₹50 Handing Fee</span>
                       </div>
                     </div>
                   </div>
-                  {errors.paymentMode && <p className="text-xs text-red-500 mt-1 pl-1 flex items-center gap-1"><Info size={10}/> {errors.paymentMode.message}</p>}
+                  {errors.paymentMode && <p className="text-xs text-red-500 mt-1 pl-1 flex items-center gap-1"><Info size={10} /> {errors.paymentMode.message}</p>}
                 </div>
 
                 {/* Secure Online Form */}
@@ -611,16 +646,15 @@ const RegistrationContent = () => {
                   {paymentMode === "ONLINE" && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                       <div className="bg-blue-950/20 border border-blue-500/20 rounded-3xl p-6 sm:p-8 backdrop-blur-md">
-                        
+
                         <div className="flex flex-col md:flex-row gap-8 items-center mb-8 bg-black/40 p-6 rounded-2xl border border-white/5">
                           <div className="bg-white p-3 rounded-2xl w-fit">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=malaavanya@oksbi&pn=Receiver&am=10" alt="Payment QR" className="w-32 h-32 object-contain" />
-                            {/* NOTE: We default to an API QR, but if they have /payment_qr.jpeg it will just break or user will replace it */}
+                            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=puviyarasisarathi63@okaxis&pn=Puviyarasi%20Sarathi&am=${totalPrice}&cu=INR`} alt="Payment QR" className="w-32 h-32 object-contain" />
                           </div>
                           <div className="text-center md:text-left">
                             <h4 className="text-blue-300 font-bold tracking-widest uppercase text-sm mb-1">Scan to Authenticate</h4>
                             <p className="text-2xl font-mono text-white tracking-widest mb-1">₹{totalPrice}</p>
-                            <div className="inline-block px-3 py-1 bg-white/10 rounded-md font-mono text-sm text-gray-300 mt-2">malaavanya@oksbi</div>
+                            <div className="inline-block px-3 py-1 bg-white/10 rounded-md font-mono text-sm text-gray-300 mt-2">puviyarasisarathi63@okaxis</div>
                           </div>
                         </div>
 
@@ -680,15 +714,15 @@ const Registration = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
-          <motion.div 
-            initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration: 0.3}} 
-            onClick={onClose} 
-            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer" 
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer"
           />
-          <motion.div 
-            initial={{ opacity: 0, y: 30, scale: 0.95 }} 
-            animate={{ opacity: 1, y: 0, scale: 1 }} 
-            exit={{ opacity: 0, y: 20, scale: 0.95 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-[2.5rem] bg-[#030014] border border-white/10 shadow-[0_0_100px_rgba(139,92,246,0.15)] flex flex-col"
           >
             {/* Background Decorations */}
@@ -696,7 +730,7 @@ const Registration = ({ isOpen, onClose }) => {
               <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-fuchsia-600/10 blur-[120px] rounded-full" />
               <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-violet-600/10 blur-[120px] rounded-full" />
               <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-blue-600/5 blur-[100px] rounded-full" />
-              
+
               {/* Subtle mesh lines */}
               <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`, backgroundSize: '40px 40px' }} />
             </div>
@@ -704,7 +738,7 @@ const Registration = ({ isOpen, onClose }) => {
             <div className="sticky top-0 right-0 w-full flex justify-between items-center p-6 z-[110] bg-[#030014]/80 backdrop-blur-md border-b border-white/5">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-fuchsia-500 to-violet-600 flex items-center justify-center p-1.5 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-                   <Sparkles className="text-white w-full h-full" />
+                  <Sparkles className="text-white w-full h-full" />
                 </div>
                 <h2 className="text-lg font-black font-heading text-white tracking-tight uppercase flex flex-col sm:flex-row sm:items-center sm:gap-2">
                   <span className="text-fuchsia-400">Constellation</span>
@@ -712,14 +746,14 @@ const Registration = ({ isOpen, onClose }) => {
                   <span className="text-white">Registration Desk</span>
                 </h2>
               </div>
-              <button 
-                onClick={onClose} 
+              <button
+                onClick={onClose}
                 className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white transition-all active:scale-95 flex items-center justify-center"
               >
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="w-full relative z-10 px-4 sm:px-6 md:px-0 pb-12 mt-20 lg:mt-0">
               <RegistrationContent />
             </div>
