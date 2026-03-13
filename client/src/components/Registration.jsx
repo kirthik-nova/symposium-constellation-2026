@@ -21,12 +21,13 @@ const IS_REGISTRATION_OPEN = true; // Toggle for testing
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
   phone: z.string().min(10, "Phone number too short").max(15, "Phone number too long").regex(/^[\d+\-\s]*$/, "Invalid characters in phone number"),
-  teamSize: z.enum(["1", "2", "3", "4"], { required_error: "Select team size" }),
+  teamSize: z.enum(["2", "3", "4"], { required_error: "Select team size" }),
   teamMembers: z.string().min(3, "At least one team member name is required"),
   college: z.string().min(2, "College Name is required"),
-  department: z.string().min(2, "Department is required"),
+  department: z.string().min(1, "Department is required"),
+  otherDepartment: z.string().optional(),
   year: z.string().min(1, "Year is required"),
-  collegeIdLink: z.string().url("Invalid URL"),
+  collegeIdLink: z.string().min(5, "A valid link (Drive/Cloud) is required"),
   email: z.string().email("Invalid email address"),
   techEvents: z.array(z.string()).refine((val) => val.length > 0, "Select at least one Technical Event"),
   nonTechEvents: z.array(z.string()).max(1, "Only 1 Non-Technical event allowed").optional(),
@@ -41,6 +42,9 @@ const formSchema = z.object({
   paymentMode: z.string().min(1, "Payment mode is required"),
   transactionId: z.string().optional().or(z.literal('')),
 }).superRefine((data, ctx) => {
+  if (data.department === "Others" && (!data.otherDepartment || data.otherDepartment.trim() === "")) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Please specify your department", path: ["otherDepartment"] });
+  }
   if (data.techEvents.includes("PPT")) {
       if (!data.pptTitle || data.pptTitle.length < 2) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Paper Title is required for PPT", path: ["pptTitle"] });
@@ -201,8 +205,8 @@ const RegistrationContent = () => {
     defaultValues: {
       techEvents: [], nonTechEvents: [], paymentMode: "OFFLINE",
       pptTitle: "", pptLink: "", transactionId: "", name: "", email: "",
-      phone: "+91 ", teamSize: "1", teamMembers: "", college: "",
-      department: "", year: "", collegeIdLink: "", food: "Veg"
+      phone: "+91 ", teamSize: "2", teamMembers: "", college: "",
+      department: "", otherDepartment: "", year: "", collegeIdLink: "", food: "Veg"
     },
   });
 
@@ -253,7 +257,8 @@ const RegistrationContent = () => {
     try {
       const payload = {
         regId: "PENDING", name: data.name, email: data.email, phone: data.phone,
-        teamSize: data.teamSize, teamMembers: data.teamMembers, department: data.department,
+        teamSize: data.teamSize, teamMembers: data.teamMembers, 
+        department: data.department === "Others" ? data.otherDepartment : data.department,
         college: data.college, year: data.year, collegeIdLink: data.collegeIdLink, food: data.food,
         techEvents: data.techEvents, nonTechEvents: data.nonTechEvents || [],
         pptTitle: isPPT ? data.pptTitle : "", pptLink: isPPT ? data.pptLink : "",
@@ -425,7 +430,6 @@ const RegistrationContent = () => {
                     <label className="text-sm font-semibold text-gray-300">Squad Size <span className="text-red-400">*</span></label>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       {[
-                        { val: "1", label: "Solo" },
                         { val: "2", label: "Duo" },
                         { val: "3", label: "Trio" },
                         { val: "4", label: "Squad" }
@@ -467,7 +471,38 @@ const RegistrationContent = () => {
                 <SectionHeading icon={Building} title="Affiliation" subtitle="Academic origins." />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-7">
                   <InputField label="Origin Base (College Name)" required {...register("college")} placeholder="Institute of Technology..." error={errors.college?.message} />
-                  <InputField label="Division (Department)" required {...register("department")} placeholder="CSE, IT, ECE..." error={errors.department?.message} />
+                  <SelectField 
+                    label="Division (Department)" 
+                    required 
+                    value={watch("department")} 
+                    onChange={(val) => setValue("department", val, { shouldValidate: true })}
+                    error={errors.department?.message}
+                    options={[
+                      { value: "CSE", label: "CSE" },
+                      { value: "IT", label: "IT" },
+                      { value: "AIDS", label: "AIDS" },
+                      { value: "AIML", label: "AIML" },
+                      { value: "CYBER", label: "CYBER" },
+                      { value: "EEE", label: "EEE" },
+                      { value: "ECE", label: "ECE" },
+                      { value: "MECH", label: "MECH" },
+                      { value: "CIVIL", label: "CIVIL" },
+                      { value: "BIO TECH", label: "BIO TECH" },
+                      { value: "B.Tech Agriculture", label: "B.Tech Agriculture" },
+                      { value: "BTech Chemical", label: "BTech Chemical" },
+                      { value: "Others", label: "Others (Specify)" }
+                    ]}
+                  />
+
+                  {watch("department") === "Others" && (
+                    <InputField 
+                      label="Specify Department" 
+                      required 
+                      {...register("otherDepartment")} 
+                      placeholder="e.g. Biomedical" 
+                      error={errors.otherDepartment?.message} 
+                    />
+                  )}
                   
                   <SelectField 
                     label="Clearance Level (Year)" 
@@ -614,13 +649,12 @@ const RegistrationContent = () => {
                         
                         <div className="flex flex-col md:flex-row gap-8 items-center mb-8 bg-black/40 p-6 rounded-2xl border border-white/5">
                           <div className="bg-white p-3 rounded-2xl w-fit">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=malaavanya@oksbi&pn=Receiver&am=10" alt="Payment QR" className="w-32 h-32 object-contain" />
-                            {/* NOTE: We default to an API QR, but if they have /payment_qr.jpeg it will just break or user will replace it */}
+                            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=puviyarasisarathi63@okaxis&pn=Puviyarasi%20Sarathi&am=${totalPrice}&cu=INR`} alt="Payment QR" className="w-32 h-32 object-contain" />
                           </div>
                           <div className="text-center md:text-left">
                             <h4 className="text-blue-300 font-bold tracking-widest uppercase text-sm mb-1">Scan to Authenticate</h4>
                             <p className="text-2xl font-mono text-white tracking-widest mb-1">₹{totalPrice}</p>
-                            <div className="inline-block px-3 py-1 bg-white/10 rounded-md font-mono text-sm text-gray-300 mt-2">malaavanya@oksbi</div>
+                            <div className="inline-block px-3 py-1 bg-white/10 rounded-md font-mono text-sm text-gray-300 mt-2">puviyarasisarathi63@okaxis</div>
                           </div>
                         </div>
 

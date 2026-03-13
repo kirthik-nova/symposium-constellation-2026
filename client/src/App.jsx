@@ -13,6 +13,7 @@ import Preloader from './components/Preloader';
 import Registration from './components/Registration';
 import TicketTracker from './components/TicketTracker';
 import TicketPage from './components/TicketPage';
+import AdminDashboard from './components/AdminDashboard';
 
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -118,6 +119,7 @@ const App = () => {
       <Route path="/register" element={<MainPage />} />
       <Route path="/track" element={<MainPage />} />
       <Route path="/ticket" element={<TicketPage />} />
+      <Route path="/admin" element={<AdminDashboard />} />
     </Routes>
   );
 };

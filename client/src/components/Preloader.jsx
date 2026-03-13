@@ -199,9 +199,22 @@ const Preloader = ({ onComplete }) => {
 
 
 
-  const handleEnter = () => {
-    if (stage < 4) return;
-    onComplete();
+  const handleGlobalClick = (e) => {
+    // If we're at the gate, the gate's own onClick handles startSequence
+    if (gate) return;
+
+    // Clear all existing stage-transition timers
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+
+    if (stage < 4) {
+      // Advance to the cinematic text screen
+      setStage(4);
+      setVisibleWords(5); // Show all words immediately if skipped to this stage
+    } else if (stage === 4) {
+      // Already at text screen, proceed to home
+      onComplete();
+    }
   };
 
   const scale = isMobile ? 0.45 : 1;
@@ -210,7 +223,7 @@ const Preloader = ({ onComplete }) => {
   const wordRevealDuration = 1.2;
 
   return (
-    <>
+    <div onClick={handleGlobalClick} className="cursor-pointer">
       <AnimatePresence>
 
       {/* ── GATE ─────────────────────────────────────────────── */}
@@ -817,9 +830,8 @@ const Preloader = ({ onComplete }) => {
             display: 'flex', flexDirection: 'column',
             alignItems: 'center', justifyContent: 'center',
             overflow: 'hidden',
-            cursor: visibleWords >= 5 ? 'pointer' : 'default',
+            cursor: 'pointer',
           }}
-          onClick={visibleWords >= 5 ? handleEnter : undefined}
         >
           {/* Deep radial atmosphere */}
           <motion.div
@@ -1014,7 +1026,6 @@ const Preloader = ({ onComplete }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.8 }}
-                onClick={handleEnter}
                 style={{
                   marginTop: isMobile ? 28 : 42,
                   display: 'flex', alignItems: 'center', gap: 14,
@@ -1054,53 +1065,8 @@ const Preloader = ({ onComplete }) => {
       )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {showSkip && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[1000001]"
-          >
-            <motion.button
-              onClick={onComplete}
-              whileHover={{ scale: 1.05, letterSpacing: '0.4em' }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative px-8 py-3 rounded-full overflow-hidden transition-all duration-500"
-              style={{ pointerEvents: 'auto' }}
-            >
-              {/* Button Background with Glassmorphism */}
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-xl border border-white/10 group-hover:border-fuchsia-500/50 transition-colors" />
-              
-              {/* Animated Inner Glow */}
-              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-fuchsia-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              
-              <div className="relative flex items-center gap-3">
-                <span className="text-[10px] font-mono tracking-[0.3em] text-white/40 group-hover:text-white transition-colors uppercase italic">
-                  Abstain Cinematic
-                </span>
-                <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-fuchsia-500/20 transition-colors">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3 text-white/30 group-hover:text-fuchsia-400 transition-colors">
-                    <polyline points="13 17 18 12 13 7" />
-                    <polyline points="6 17 11 12 6 7" />
-                  </svg>
-                </div>
-              </div>
-            </motion.button>
-            
-            {/* Subtle floating label */}
-            <motion.p 
-              animate={{ opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="text-center text-[8px] font-mono tracking-widest text-fuchsia-400/50 mt-3 uppercase"
-            >
-              Bypass Protocol
-            </motion.p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
+    </div>
+  ); 
 };
 
 export default Preloader;
