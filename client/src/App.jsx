@@ -13,7 +13,7 @@ import Preloader from './components/Preloader';
 import Registration from './components/Registration';
 import TicketTracker from './components/TicketTracker';
 import TicketPage from './components/TicketPage';
-import UnderConstruction from './components/UnderConstruction';
+
 import { Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -35,12 +35,12 @@ const MainPage = () => {
       const target = e.target.closest('a');
       if (!target) return;
       const href = target.getAttribute('href');
-      if (href === '#register' || href === '/home#register') {
+      if (href === '#register' || href === '/#register') {
         e.preventDefault();
         setIsRegOpen(true);
         return;
       }
-      if (href === '#track' || href === '/home#track') {
+      if (href === '#track' || href === '/#track') {
         e.preventDefault();
         setIsTrackerOpen(true);
         return;
@@ -102,8 +102,7 @@ const MainPage = () => {
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<UnderConstruction />} />
-      <Route path="/home" element={<MainPage />} />
+      <Route path="/" element={<MainPage />} />
       <Route path="/ticket" element={<TicketPage />} />
     </Routes>
   );
