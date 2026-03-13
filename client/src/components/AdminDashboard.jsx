@@ -4,7 +4,8 @@ import {
   Users, CheckCircle2, XCircle, Search, 
   Download, Eye, Filter, Loader2, Link as LinkIcon,
   CreditCard, ShieldCheck, RefreshCw, LogOut, ExternalLink,
-  ChevronDown
+  ChevronDown, Phone, Mail, Building, Calendar, Clock,
+  Laptop, FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -301,52 +302,89 @@ const AdminDashboard = () => {
                                         <h3 className="text-3xl font-black italic uppercase tracking-tighter leading-none">{selectedReg.name}</h3>
                                         <p className="text-fuchsia-400 font-mono tracking-widest text-sm">{selectedReg.registrationid}</p>
                                         <div className="flex items-center gap-2 mt-2">
-                                            <span className="px-2 py-0.5 rounded bg-white/10 text-[9px] font-bold uppercase text-gray-400 tracking-widest">{selectedReg.paymentstatus}</span>
+                                            <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest ${
+                                                selectedReg.paymentstatus?.includes("VERIFIED") && !selectedReg.paymentstatus?.includes("UNVERIFIED") ? 'bg-green-500/20 text-green-400' :
+                                                selectedReg.paymentstatus?.includes("UNVERIFIED") ? 'bg-orange-500/20 text-orange-400' :
+                                                'bg-blue-500/20 text-gray-400'
+                                            }`}>{selectedReg.paymentstatus}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6">
-                                    <DetailItem label="Comms (Phone)" val={selectedReg.phone} icon={RefreshCw} />
-                                    <DetailItem label="Email" val={selectedReg.email} icon={LogOut} isLink href={`mailto:${selectedReg.email}`} />
-                                    <DetailItem label="Sector (Dept)" val={selectedReg.department} icon={RefreshCw} />
+                                {/* Core Identity */}
+                                <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+                                    <DetailItem label="Comms (Phone)" val={selectedReg.phone} icon={Phone} />
+                                    <DetailItem label="Email" val={selectedReg.email} isLink href={`mailto:${selectedReg.email}`} icon={Mail} />
+                                    <DetailItem label="Sector (Dept)" val={selectedReg.department} icon={Building} />
                                     <DetailItem label="Academy" val={selectedReg.college} icon={ShieldCheck} />
-                                    <DetailItem label="Tech Stack" val={selectedReg.techevents} icon={RefreshCw} />
-                                    <DetailItem label="Battlefield" val={selectedReg.nontechevents} icon={RefreshCw} />
-                                    <DetailItem label="Squad Size" val={selectedReg.teamsize} icon={Users} />
-                                    <DetailItem label="Manifest Link" val="View Identity Content" icon={LinkIcon} isLink href={selectedReg.collegeidlink} />
+                                    <DetailItem label="Clearance (Year)" val={selectedReg.year ? `${selectedReg.year} Year` : "N/A"} icon={Calendar} />
+                                    <DetailItem label="Ration (Food)" val={selectedReg.food} icon={Clock} />
+                                    <DetailItem label="Squad Size" val={`${selectedReg.teamsize} Person(s)`} icon={Users} />
+                                    <DetailItem label="Squad Members" val={selectedReg.teammembers} icon={Users} />
                                 </div>
 
-                                {selectedReg.paymentmode === "ONLINE" && (
-                                    <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/5 space-y-6">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <CreditCard size={18} className="text-fuchsia-400" />
-                                            <h4 className="text-sm font-black uppercase tracking-widest italic">Electronic Transaction Log</h4>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-6">
-                                            <DetailItem label="Transaction ID" val={selectedReg.transactionid} />
-                                            <DetailItem label="Payer ID" val={selectedReg.payername} />
-                                            <DetailItem label="Amount" val={`₹${selectedReg.totalamount}`} />
-                                            <DetailItem label="Visual Proof" val="Open Screenshot" isLink href={selectedReg.screenshotlink} icon={ExternalLink} />
-                                        </div>
-                                        <div className="flex gap-4 pt-4 border-t border-white/5">
-                                            <button 
-                                                onClick={() => updateStatus(selectedReg.registrationid, "PAID (VERIFIED)")}
-                                                disabled={isUpdating || selectedReg.paymentstatus === "PAID (VERIFIED)"}
-                                                className="flex-1 py-4 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 disabled:opacity-50"
-                                            >
-                                                {isUpdating ? <Loader2 className="animate-spin" size={16} /> : <><CheckCircle2 size={16} /> Confirm Verif</>}
-                                            </button>
-                                            <button 
-                                                onClick={() => updateStatus(selectedReg.registrationid, "PENDING")}
-                                                disabled={isUpdating}
-                                                className="flex-1 py-4 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs rounded-2xl border border-white/10 transition-all flex items-center justify-center gap-2"
-                                            >
-                                                Mark Pending
-                                            </button>
-                                        </div>
+                                {/* Operations Hub (Events) */}
+                                <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 space-y-4">
+                                    <div className="flex items-center gap-2">
+                                        <Laptop size={16} className="text-fuchsia-400" />
+                                        <h4 className="text-xs font-black uppercase tracking-widest italic">Operations Hub</h4>
                                     </div>
-                                )}
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedReg.techevents?.split(',').map(ev => (
+                                            <span key={ev} className="px-2.5 py-1 bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-300 text-[10px] font-bold rounded-lg uppercase tracking-tight">
+                                                {ev.trim()}
+                                            </span>
+                                        ))}
+                                        {selectedReg.nontechevents?.split(',').map(ev => (
+                                            <span key={ev} className="px-2.5 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[10px] font-bold rounded-lg uppercase tracking-tight">
+                                                {ev.trim()}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    {(selectedReg.ppttitle || selectedReg.pptlink) && (
+                                        <div className="mt-4 pt-4 border-t border-white/5 space-y-3">
+                                            <div className="flex items-center gap-2">
+                                                <FileText size={14} className="text-cyan-400" />
+                                                <h5 className="text-[10px] font-black uppercase tracking-widest text-cyan-400/70">PPT Manifest</h5>
+                                            </div>
+                                            <DetailItem label="Presentation Title" val={selectedReg.ppttitle} />
+                                            <DetailItem label="Manifest Link" val="View Presentation" isLink href={selectedReg.pptlink} icon={ExternalLink} />
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Payment Log */}
+                                <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/5 space-y-6">
+                                    <div className="flex items-center gap-2">
+                                        <CreditCard size={18} className="text-fuchsia-400" />
+                                        <h4 className="text-sm font-black uppercase tracking-widest italic">Electronic Transaction Log</h4>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <DetailItem label="Payment Route" val={selectedReg.paymentmode} />
+                                        <DetailItem label="Transaction ID" val={selectedReg.transactionid} />
+                                        <DetailItem label="Payer ID" val={selectedReg.payername} />
+                                        <DetailItem label="Amount Due" val={`₹${selectedReg.totalamount}`} />
+                                        <DetailItem label="College ID Copy" val="View ID Card" isLink href={selectedReg.collegeidlink} icon={LinkIcon} />
+                                        <DetailItem label="Visual Proof" val="Open Screenshot" isLink href={selectedReg.screenshotlink} icon={ExternalLink} />
+                                    </div>
+                                    <div className="flex gap-4 pt-4 border-t border-white/5">
+                                        <button 
+                                            onClick={() => updateStatus(selectedReg.registrationid, "PAID (VERIFIED)")}
+                                            disabled={isUpdating || selectedReg.paymentstatus === "PAID (VERIFIED)"}
+                                            className="flex-1 py-4 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 disabled:opacity-50"
+                                        >
+                                            {isUpdating ? <Loader2 className="animate-spin" size={16} /> : <><CheckCircle2 size={16} /> Confirm Verif</>}
+                                        </button>
+                                        <button 
+                                            onClick={() => updateStatus(selectedReg.registrationid, "PENDING")}
+                                            disabled={isUpdating}
+                                            className="flex-1 py-4 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs rounded-2xl border border-white/10 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            Mark Pending
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
                     </div>

@@ -141,9 +141,23 @@ const Footer = () => {
                 <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 group-hover:border-purple-500/50 group-hover:text-purple-400 group-hover:shadow-[0_0_15px_rgba(138,43,226,0.2)] transition-all">
                   <Phone size={16} />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <a href="tel:+1234567890" className="hover:text-white transition-colors">+1 234 567 890</a>
-                  <a href="tel:+1987654321" className="hover:text-white transition-colors">+1 987 654 321</a>
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-fuchsia-400 uppercase font-bold tracking-tighter">Saravanan</span>
+                    <a href="tel:+919500439897" className="hover:text-white transition-colors">+91 95004 39897</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-purple-400 uppercase font-bold tracking-tighter">Suresh</span>
+                    <a href="tel:+919952480449" className="hover:text-white transition-colors">+91 99524 80449</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-pink-400 uppercase font-bold tracking-tighter">Sabu</span>
+                    <a href="tel:+918124156576" className="hover:text-white transition-colors">+91 81241 56576</a>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-blue-400 uppercase font-bold tracking-tighter">Parameshwari</span>
+                    <a href="tel:+919791701269" className="hover:text-white transition-colors">+91 97917 01269</a>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -162,7 +176,7 @@ const Footer = () => {
             <div className="space-y-6">
               <div>
                 <h4 className="text-[10px] text-fuchsia-400 font-bold tracking-[0.2em] uppercase mb-1.5 drop-shadow-[0_0_8px_rgba(232,61,232,0.5)]">Student Coordinators</h4>
-                <p className="text-white text-sm font-medium">John Doe <span className="text-gray-600 mx-2">|</span> Jane Smith</p>
+                <p className="text-white text-xs font-medium leading-relaxed">Saravanan <span className="text-gray-600 mx-1">|</span> Suresh<br />  Sabu <span className="text-gray-600 mx-1">|</span> Parameshwari</p>
               </div>
               
               <div>

@@ -199,6 +199,11 @@ const Preloader = ({ onComplete }) => {
 
 
 
+  const handleEnter = (e) => {
+    e?.stopPropagation();
+    onComplete();
+  };
+
   const handleGlobalClick = (e) => {
     // If we're at the gate, the gate's own onClick handles startSequence
     if (gate) return;
