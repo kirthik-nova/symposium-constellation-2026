@@ -18,30 +18,26 @@ import AdminDashboard from './components/AdminDashboard';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-const MainPage = () => {
-  const [loading, setLoading]     = useState(true);
+const App = () => {
+  const [loading, setLoading] = useState(true);
   const [hasEntered, setHasEntered] = useState(false);
-  const [isRegOpen, setIsRegOpen] = useState(false);
-  const [isTrackerOpen, setIsTrackerOpen] = useState(false);
-
-  const handlePreloaderComplete = () => {
-    setLoading(false);  
-    setTimeout(() => setHasEntered(true), 100);
-  };
-
-
-
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Handle specific routes that open modals
-    if (location.pathname === '/register') {
-      setIsRegOpen(true);
-    } else if (location.pathname === '/track') {
-      setIsTrackerOpen(true);
-    }
+  const handlePreloaderComplete = () => {
+    setLoading(false);
+    setTimeout(() => setHasEntered(true), 100);
+  };
 
+  // Derived states for modals based on route
+  const isRegOpen = location.pathname === '/register';
+  const isTrackerOpen = location.pathname === '/track';
+
+  const handleModalClose = () => {
+    navigate('/');
+  };
+
+  useEffect(() => {
     // Handle section scrolling
     const sections = ['events', 'schedule', 'about'];
     const path = location.pathname.replace('/', '');
@@ -49,26 +45,16 @@ const MainPage = () => {
     if (sections.includes(path)) {
       const el = document.getElementById(path);
       if (el) {
-        // Short delay to ensure component is rendered
         setTimeout(() => {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
       }
     } else if (location.pathname === '/' || location.pathname === '/home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (hasEntered) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
-  }, [location.pathname]);
-
-  // Sync state back to URL when modals close
-  const handleRegClose = () => {
-    setIsRegOpen(false);
-    if (location.pathname === '/register') navigate('/');
-  };
-
-  const handleTrackerClose = () => {
-    setIsTrackerOpen(false);
-    if (location.pathname === '/track') navigate('/');
-  };
+  }, [location.pathname, hasEntered]);
 
   return (
     <div className="min-h-screen bg-[#000000] text-white font-sans selection:bg-fuchsia-500/30 selection:text-white">
@@ -78,49 +64,42 @@ const MainPage = () => {
         )}
       </AnimatePresence>
 
-      {!loading && (
-        <div className="relative">
-          <NetworkBackground />
-          <ParticleBackground />
+      <Routes>
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/ticket" element={<TicketPage />} />
+        <Route path="*" element={
+          !loading && (
+            <div className="relative">
+              <NetworkBackground />
+              <ParticleBackground />
 
-          <motion.div
-            initial={{ y: -100, opacity: 0 }}
-            animate={hasEntered ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="z-[60]"
-          >
-            <Navbar />
-          </motion.div>
+              <motion.div
+                initial={{ y: -100, opacity: 0 }}
+                animate={hasEntered ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                className="z-[60]"
+              >
+                <Navbar />
+              </motion.div>
 
-          <main className="relative z-10">
-            <Hero hasEntered={hasEntered} />
-            <CountdownPoster />
-            <Events />
-            <Schedule />
-            <Registration isOpen={isRegOpen} onClose={handleRegClose} />
-            <TicketTracker isOpen={isTrackerOpen} onClose={handleTrackerClose} />
-            <About />
-          </main>
+              <main className="relative z-10">
+                <Hero hasEntered={hasEntered} />
+                <CountdownPoster />
+                <Events />
+                <Schedule />
+                <Registration isOpen={isRegOpen} onClose={handleModalClose} />
+                <TicketTracker isOpen={isTrackerOpen} onClose={handleModalClose} />
+                <About />
+              </main>
 
-          <Footer />
-        </div>
-      )}
+              <Footer />
+            </div>
+          )
+        } />
+      </Routes>
+
+      <Toaster theme="dark" position="top-center" richColors />
     </div>
-  );
-};
-
-const App = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/events" element={<MainPage />} />
-      <Route path="/schedule" element={<MainPage />} />
-      <Route path="/about" element={<MainPage />} />
-      <Route path="/register" element={<MainPage />} />
-      <Route path="/track" element={<MainPage />} />
-      <Route path="/ticket" element={<TicketPage />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-    </Routes>
   );
 };
 
