@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin, Mail, MapPin, Phone, Github } from 'lucide-react';
+import { Instagram, Linkedin, Mail, MapPin, Phone, Github, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -92,13 +92,16 @@ const Footer = () => {
               Tamil Nadu — 606 603.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-fuchsia-400 hover:border-fuchsia-400/50 hover:bg-fuchsia-400/10 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(232,61,232,0.2)]">
+              <a href="https://chat.whatsapp.com/JJyxCwedZTnHCSFVvGxYGg" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-green-400 hover:border-green-400/50 hover:bg-green-400/10 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+                <MessageCircle size={18} />
+              </a>
+              <a href="https://www.instagram.com/constellation_2k26?igsh=dGN3cWV1Z2p6ZTIy" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-fuchsia-400 hover:border-fuchsia-400/50 hover:bg-fuchsia-400/10 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(232,61,232,0.2)]">
                 <Instagram size={18} />
               </a>
               <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-purple-400 hover:border-purple-400/50 hover:bg-purple-400/10 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(138,43,226,0.2)]">
                 <Linkedin size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-pink-400 hover:border-pink-400/50 hover:bg-pink-400/10 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(236,72,153,0.2)]">
+              <a href="mailto:constellation2k26@gmail.com" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-pink-400 hover:border-pink-400/50 hover:bg-pink-400/10 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(236,72,153,0.2)]">
                 <Mail size={18} />
               </a>
             </div>
@@ -131,6 +134,12 @@ const Footer = () => {
           >
             <h3 className="text-white font-heading text-lg font-bold mb-8 tracking-wide">Contact Us</h3>
             <ul className="space-y-5 text-sm text-gray-400 font-medium">
+              <li className="flex items-center gap-4 group">
+                <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 group-hover:border-green-500/50 group-hover:text-green-400 group-hover:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all">
+                  <MessageCircle size={16} />
+                </div>
+                <a href="https://chat.whatsapp.com/JJyxCwedZTnHCSFVvGxYGg" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors uppercase font-bold tracking-widest text-[11px]">Join WhatsApp Group</a>
+              </li>
               <li className="flex items-center gap-4 group">
                 <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 group-hover:border-fuchsia-500/50 group-hover:text-fuchsia-400 group-hover:shadow-[0_0_15px_rgba(232,61,232,0.2)] transition-all">
                   <Mail size={16} />
