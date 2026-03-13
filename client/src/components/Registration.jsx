@@ -754,6 +754,24 @@ const Registration = ({ isOpen, onClose }) => {
               </button>
             </div>
 
+            {/* Sticky WhatsApp Help for Registration */}
+            <motion.a
+              href="https://chat.whatsapp.com/JJyxCwedZTnHCSFVvGxYGg"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 z-[120] w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(34,197,94,0.5)] group"
+              title="Need help with registration?"
+            >
+              <MessageCircle size={30} className="text-white" />
+              <span className="absolute right-full mr-4 px-3 py-2 bg-black/90 backdrop-blur-md border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-2xl">
+                Need Help?
+              </span>
+            </motion.a>
+
             <div className="w-full relative z-10 px-4 sm:px-6 md:px-0 pb-12 mt-20 lg:mt-0">
               <RegistrationContent />
             </div>

@@ -91,74 +91,15 @@ const Hero = ({ hasEntered }) => {
           className="flex flex-col items-start text-left lg:col-span-7"
         >
 
-          <div className="flex flex-wrap items-center gap-4 mb-7">
-            {/* 1 ── Registration badge */}
-            <motion.div
-              {...getRevealProps(0.6, { from: { y: -20, scale: 0.85 }, to: { scale: 1 } })}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full
-                         border border-white/10 bg-white/5 backdrop-blur-md shadow-lg
-                         overflow-hidden relative group cursor-default"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20
-                             translate-x-[-100%] group-hover:translate-x-[100%]
-                             transition-transform duration-1000 ease-in-out" />
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-fuchsia-500 shadow-[0_0_8px_#e83de8]" />
-              </span>
-              <span className="text-xs font-semibold tracking-widest text-gray-200 uppercase relative z-10">
-                Registration Open
-              </span>
-            </motion.div>
-
-            {/* WhatsApp Community Badge */}
-            <motion.a
-              href="https://chat.whatsapp.com/JJyxCwedZTnHCSFVvGxYGg"
-              target="_blank"
-              rel="noopener noreferrer"
-              {...getRevealProps(0.8, { from: { y: -20, scale: 0.85 }, to: { scale: 1 } })}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full
-                         border border-green-500/20 bg-green-500/5 backdrop-blur-md shadow-lg
-                         overflow-hidden relative group cursor-pointer"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20
-                             translate-x-[-100%] group-hover:translate-x-[100%]
-                             transition-transform duration-1000 ease-in-out" />
-              <MessageCircle size={14} className="text-green-400 relative z-10" />
-              <span className="text-xs font-semibold tracking-widest text-gray-200 uppercase relative z-10">
-                Join Community
-              </span>
-            </motion.a>
-
-            {/* Instagram Badge */}
-            <motion.a
-              href="https://www.instagram.com/constellation_2k26?igsh=dGN3cWV1Z2p6ZTIy"
-              target="_blank"
-              rel="noopener noreferrer"
-              {...getRevealProps(1.0, { from: { y: -20, scale: 0.85 }, to: { scale: 1 } })}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full
-                         border border-fuchsia-500/20 bg-fuchsia-500/5 backdrop-blur-md shadow-lg
-                         overflow-hidden relative group cursor-pointer"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20
-                             translate-x-[-100%] group-hover:translate-x-[100%]
-                             transition-transform duration-1000 ease-in-out" />
-              <Instagram size={14} className="text-fuchsia-400 relative z-10" />
-              <span className="text-xs font-semibold tracking-widest text-gray-200 uppercase relative z-10">
-                Follow Updates
-              </span>
-            </motion.a>
-          </div>
-
-          {/* 2 ── Eyebrow line */}
+          {/* 1 ── Eyebrow line */}
           <motion.div
-            {...getRevealProps(1.2, { from: { x: -30, y: 0 }, to: { x: 0 } })}
+            {...getRevealProps(0.6, { from: { x: -30, y: 0 }, to: { x: 0 } })}
             className="flex items-center gap-3 mb-4"
           >
             <motion.div
               initial={{ scaleX: 0 }}
               animate={hasEntered ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{ duration: 1.0, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 1.0, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="w-8 h-px bg-fuchsia-400/70 origin-left"
               style={{ willChange: 'transform' }}
             />
@@ -168,7 +109,7 @@ const Hero = ({ hasEntered }) => {
             </h2>
           </motion.div>
 
-          {/* 3 ── CONSTELLATION — per-letter stagger */}
+          {/* 2 ── CONSTELLATION — per-letter stagger */}
           <h1 className="text-[2.1rem] leading-[1.1] sm:text-5xl md:text-7xl lg:text-[5.5rem]
                          font-black text-white font-heading tracking-tight mb-2 sm:mb-3 flex flex-col">
             <div className="flex flex-nowrap overflow-hidden pb-1 sm:pb-2">
@@ -187,11 +128,11 @@ const Hero = ({ hasEntered }) => {
               ))}
             </div>
 
-            {/* 4 ── 2K26 */}
+            {/* 3 ── 2K26 */}
             <motion.span
               initial={{ opacity: 0, y: 30, clipPath: 'inset(0 100% 0 0)' }}
               animate={hasEntered ? { opacity: 1, y: 0, clipPath: 'inset(0 0% 0 0)' } : {}}
-              transition={{ duration: 1.4, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 1.4, delay: 1.6, ease: [0.16, 1, 0.3, 1] }}
               className="text-gradient-premium pb-2 block"
               style={{ willChange: 'transform' }}
             >

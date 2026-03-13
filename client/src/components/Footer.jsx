@@ -202,6 +202,39 @@ const Footer = () => {
 
         </div>
 
+        {/* Badges Migration */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-wrap items-center justify-center gap-4 mb-20"
+        >
+          {/* Registration badge */}
+          <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg overflow-hidden relative group cursor-default">
+            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-fuchsia-500 shadow-[0_0_8px_#e83de8]" />
+            </span>
+            <span className="text-xs font-bold tracking-[0.2em] text-gray-200 uppercase relative z-10">Registration Open</span>
+          </div>
+
+          {/* WhatsApp Community Badge */}
+          <a href="https://chat.whatsapp.com/JJyxCwedZTnHCSFVvGxYGg" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-green-500/20 bg-green-500/5 backdrop-blur-md shadow-lg overflow-hidden relative group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+            <MessageCircle size={16} className="text-green-400 relative z-10" />
+            <span className="text-xs font-bold tracking-[0.2em] text-gray-200 uppercase relative z-10">Join Community</span>
+          </a>
+
+          {/* Instagram Badge */}
+          <a href="https://www.instagram.com/constellation_2k26?igsh=dGN3cWV1Z2p6ZTIy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/5 backdrop-blur-md shadow-lg overflow-hidden relative group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+            <Instagram size={16} className="text-fuchsia-400 relative z-10" />
+            <span className="text-xs font-bold tracking-[0.2em] text-gray-200 uppercase relative z-10">Follow Updates</span>
+          </a>
+        </motion.div>
+
         {/* Bottom Bar */}
         <motion.div 
           initial={{ opacity: 0 }}
