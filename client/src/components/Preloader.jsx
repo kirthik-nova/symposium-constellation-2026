@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX } from 'lucide-react';
 
 // ── Department definitions with SVG icons ──────────────────────────────────────
 const DEPARTMENTS = [
@@ -135,33 +134,14 @@ const Preloader = ({ onComplete }) => {
   const [gate, setGate] = useState(true);
   const [stage, setStage] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [muted, setMuted] = useState(false);
   const [activeDept, setActiveDept] = useState(-1); // which dept is "highlighted" during intro
   const [visibleWords, setVisibleWords] = useState(0); // for word-by-word text reveal
-  const audioRef = useRef(null);
   const timersRef = useRef([]);
 
   const startSequence = () => {
     setGate(false);
     const mobile = window.innerWidth < 768;
     setIsMobile(mobile);
-
-    const audio = new Audio('/bg.mpeg');
-    audio.loop = true;
-    audio.volume = 0;
-    audioRef.current = audio;
-    audio.play().then(() => {
-      let vol = 0;
-      const fadeIn = setInterval(() => {
-        vol = Math.min(vol + 0.05, 0.7);
-        // Only update if current volume is lower to not conflict with external fades
-        if (audio.volume < vol) {
-          audio.volume = vol;
-        }
-        if (vol >= 0.7) clearInterval(fadeIn);
-      }, 100);
-      timersRef.current.push(fadeIn);
-    }).catch(() => { });
 
     // Base timing variables for easier adjustment
     const startDelay = 1000;
@@ -211,13 +191,11 @@ const Preloader = ({ onComplete }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.muted = muted;
-  }, [muted]);
+
 
   const handleEnter = () => {
     if (stage < 4) return;
-    onComplete(audioRef.current);
+    onComplete();
   };
 
   const scale = isMobile ? 0.45 : 1;
@@ -812,21 +790,7 @@ const Preloader = ({ onComplete }) => {
             </div>
           </motion.div>
 
-          {/* Mute toggle */}
-          <button
-            onClick={() => setMuted(m => !m)}
-            style={{
-              position: 'absolute', bottom: 24, right: 24,
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: '50%', width: 40, height: 40,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: 'rgba(196,181,253,0.8)', zIndex: 30,
-              backdropFilter: 'blur(10px)',
-            }}
-          >
-            {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-          </button>
+
         </motion.div>
       )}
 
@@ -1078,21 +1042,7 @@ const Preloader = ({ onComplete }) => {
             )}
           </AnimatePresence>
 
-          {/* Mute toggle on text screen */}
-          <button
-            onClick={(e) => { e.stopPropagation(); setMuted(m => !m); }}
-            style={{
-              position: 'absolute', bottom: 24, right: 24,
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              borderRadius: '50%', width: 40, height: 40,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: 'rgba(196,181,253,0.7)', zIndex: 30,
-              backdropFilter: 'blur(10px)',
-            }}
-          >
-            {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-          </button>
+
         </motion.div>
       )}
     </AnimatePresence>
