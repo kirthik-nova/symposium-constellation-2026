@@ -206,7 +206,7 @@ const RegistrationContent = () => {
       techEvents: [], nonTechEvents: [], paymentMode: "OFFLINE",
       pptTitle: "", pptLink: "", transactionId: "", name: "", email: "",
       phone: "+91 ", teamSize: "2", teamMembers: "", college: "",
-      department: "", otherDepartment: "", year: "", collegeIdLink: "", food: "Veg"
+      department: "", otherDepartment: "", year: "I", collegeIdLink: "", food: "Veg"
     },
   });
 
@@ -414,7 +414,7 @@ const RegistrationContent = () => {
               <div className="p-3 bg-blue-500/20 rounded-xl shrink-0"><User className="text-blue-400" size={20} /></div>
               <p className="text-sm sm:text-base text-blue-200 leading-relaxed font-light mt-0.5">
                 <strong className="font-bold text-white mr-2 tracking-wide">SQUAD PROTOCOL:</strong>
-                Any <span className="italic">ONE member (Team Leader)</span> can register for the entire squad. Gather your specs and proceed below.
+                Registration is closed to seniors. This event is <span className="text-fuchsia-400 font-bold uppercase tracking-wider">exclusively for First Year Students</span>. Any <span className="italic">ONE member (Team Leader)</span> can register for the entire squad.
               </p>
             </div>
 
@@ -511,10 +511,7 @@ const RegistrationContent = () => {
                     onChange={(val) => setValue("year", val, { shouldValidate: true })}
                     error={errors.year?.message}
                     options={[
-                      { value: "I", label: "Freshman (I)" },
-                      { value: "II", label: "Sophomore (II)" },
-                      { value: "III", label: "Junior (III)" },
-                      { value: "IV", label: "Senior (IV)" }
+                      { value: "I", label: "Freshman (I) - Exclusive Access" }
                     ]}
                   />
 

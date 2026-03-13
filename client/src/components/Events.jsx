@@ -307,7 +307,7 @@ const Events = () => {
 
         {/* TECHNICAL */}
         <div style={{ marginBottom: isMobile ? 64 : 120 }}>
-          <SectionHeader number="01" label="Competitive Tech" title="Technical Events" accent="#e2e8f0" accentRgb="226,232,240" sub="Challenge your skills, debug complex systems, and innovate with cutting-edge technology." />
+          <SectionHeader number="01" label="Freshmen Only" title="Technical Events" accent="#e2e8f0" accentRgb="226,232,240" sub="Exclusive battlefield for first-year minds. Challenge your skills, debug complex systems, and innovate with cutting-edge technology." />
           <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 14 : 20 }}>
             {techEvents.map((event, i) => <HeroCard key={event.id} event={event} flip={i % 2 !== 0} />)}
           </div>
@@ -315,7 +315,7 @@ const Events = () => {
 
         {/* NON-TECHNICAL */}
         <div>
-          <SectionHeader number="02" label="Fun & Creative" title="Non-Technical Events" accent="#e879f9" accentRgb="232,121,249" sub="Unwind and showcase your creativity, humor, and wit — no code required." />
+          <SectionHeader number="02" label="Freshmen Only" title="Non-Technical Events" accent="#e879f9" accentRgb="232,121,249" sub="Exclusive fun for the batch of 2K26. Unwind and showcase your creativity, humor, and wit — no code required." />
           <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 14 : 20 }}>
             {nonTechEvents.map((event, i) => <HeroCard key={event.id} event={event} flip={i % 2 !== 0} />)}
           </div>
