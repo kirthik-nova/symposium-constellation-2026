@@ -80,7 +80,14 @@ const Footer = () => {
           >
             <Link to="/" className="flex items-center gap-3 mb-6 group w-fit">
               <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(232,61,232,0.25)] group-hover:border-fuchsia-500/50 transition-all duration-500">
-                <img src="/favicon.png" alt="Constellation 2K26 Logo" className="w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-500" />
+                <motion.img 
+                  src="/favicon.png" 
+                  alt="Constellation 2K26 Logo" 
+                  className="w-full h-full object-cover scale-110" 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  whileHover={{ rotate: 360, transition: { duration: 4 } }}
+                />
               </div>
               <span className="text-white font-heading text-3xl font-black tracking-tight group-hover:text-fuchsia-400 transition-colors duration-500 uppercase">
                 Constellation<span className="text-white/30 font-light ml-0.5 group-hover:text-white/50 transition-colors">2K26</span>
