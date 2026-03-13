@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, ArrowRight, Sparkles, Instagram, Linkedin, Mail, Phone, Github } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight, Sparkles, Instagram, Linkedin, Mail, Phone, Github, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MagneticButton from './MagneticButton';
 import DepartmentConstellation from './DepartmentConstellation';
@@ -91,24 +91,64 @@ const Hero = ({ hasEntered }) => {
           className="flex flex-col items-start text-left lg:col-span-7"
         >
 
-          {/* 1 ── Registration badge */}
-          <motion.div
-            {...getRevealProps(0.6, { from: { y: -20, scale: 0.85 }, to: { scale: 1 } })}
-            className="mb-7 inline-flex items-center gap-3 px-4 py-2 rounded-full
-                       border border-white/10 bg-white/5 backdrop-blur-md shadow-lg
-                       overflow-hidden relative group cursor-default"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20
-                           translate-x-[-100%] group-hover:translate-x-[100%]
-                           transition-transform duration-1000 ease-in-out" />
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-fuchsia-500 shadow-[0_0_8px_#e83de8]" />
-            </span>
-            <span className="text-xs font-semibold tracking-widest text-gray-200 uppercase relative z-10">
-              Registration Open
-            </span>
-          </motion.div>
+          <div className="flex flex-wrap items-center gap-4 mb-7">
+            {/* 1 ── Registration badge */}
+            <motion.div
+              {...getRevealProps(0.6, { from: { y: -20, scale: 0.85 }, to: { scale: 1 } })}
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full
+                         border border-white/10 bg-white/5 backdrop-blur-md shadow-lg
+                         overflow-hidden relative group cursor-default"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20
+                             translate-x-[-100%] group-hover:translate-x-[100%]
+                             transition-transform duration-1000 ease-in-out" />
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-fuchsia-500 shadow-[0_0_8px_#e83de8]" />
+              </span>
+              <span className="text-xs font-semibold tracking-widest text-gray-200 uppercase relative z-10">
+                Registration Open
+              </span>
+            </motion.div>
+
+            {/* WhatsApp Community Badge */}
+            <motion.a
+              href="https://chat.whatsapp.com/JJyxCwedZTnHCSFVvGxYGg"
+              target="_blank"
+              rel="noopener noreferrer"
+              {...getRevealProps(0.8, { from: { y: -20, scale: 0.85 }, to: { scale: 1 } })}
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full
+                         border border-green-500/20 bg-green-500/5 backdrop-blur-md shadow-lg
+                         overflow-hidden relative group cursor-pointer"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20
+                             translate-x-[-100%] group-hover:translate-x-[100%]
+                             transition-transform duration-1000 ease-in-out" />
+              <MessageCircle size={14} className="text-green-400 relative z-10" />
+              <span className="text-xs font-semibold tracking-widest text-gray-200 uppercase relative z-10">
+                Join Community
+              </span>
+            </motion.a>
+
+            {/* Instagram Badge */}
+            <motion.a
+              href="https://www.instagram.com/constellation_2k26?igsh=dGN3cWV1Z2p6ZTIy"
+              target="_blank"
+              rel="noopener noreferrer"
+              {...getRevealProps(1.0, { from: { y: -20, scale: 0.85 }, to: { scale: 1 } })}
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full
+                         border border-fuchsia-500/20 bg-fuchsia-500/5 backdrop-blur-md shadow-lg
+                         overflow-hidden relative group cursor-pointer"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20
+                             translate-x-[-100%] group-hover:translate-x-[100%]
+                             transition-transform duration-1000 ease-in-out" />
+              <Instagram size={14} className="text-fuchsia-400 relative z-10" />
+              <span className="text-xs font-semibold tracking-widest text-gray-200 uppercase relative z-10">
+                Follow Updates
+              </span>
+            </motion.a>
+          </div>
 
           {/* 2 ── Eyebrow line */}
           <motion.div

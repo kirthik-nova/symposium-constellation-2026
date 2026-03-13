@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'sonner';
+import { MessageCircle } from 'lucide-react';
 import Navbar from './components/Navbar';
 import NetworkBackground from './components/NetworkBackground';
 import ParticleBackground from './components/ParticleBackground';
@@ -104,6 +105,24 @@ const App = () => {
               </main>
 
               <Footer />
+
+              {/* Floating WhatsApp Button */}
+              <motion.a
+                href="https://chat.whatsapp.com/JJyxCwedZTnHCSFVvGxYGg"
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={hasEntered ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[70] w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] group transition-all"
+                title="Join WhatsApp Community"
+              >
+                <MessageCircle size={30} className="text-white" />
+                <span className="absolute right-full mr-3 px-3 py-1.5 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  Join Community
+                </span>
+              </motion.a>
             </div>
           )
         } />
