@@ -15,48 +15,20 @@ import TicketTracker from './components/TicketTracker';
 import TicketPage from './components/TicketPage';
 import UnderConstruction from './components/UnderConstruction';
 import { Routes, Route } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const MainPage = () => {
   const [loading, setLoading]     = useState(true);
   const [hasEntered, setHasEntered] = useState(false);
   const [isRegOpen, setIsRegOpen] = useState(false);
   const [isTrackerOpen, setIsTrackerOpen] = useState(false);
-  const audioRef = useRef(null);
 
-  const handlePreloaderComplete = (audio) => {
-    audioRef.current = audio;
+  const handlePreloaderComplete = () => {
     setLoading(false);  
     setTimeout(() => setHasEntered(true), 100);
   };
 
-  useEffect(() => {
-    if (!hasEntered) return;
-    const audio = audioRef.current;
-    if (!audio) return;
 
-    const performFadeOut = () => {
-      const fadeInterval = setInterval(() => {
-        if (audio.volume > 0.015) {
-          audio.volume = Math.max(0, audio.volume - 0.01);
-        } else {
-          audio.volume = 0;
-          audio.pause();
-          clearInterval(fadeInterval);
-        }
-      }, 50);
-    };
-
-    const onScroll = () => {
-      if (window.scrollY > 100 && !audio.paused) {
-        window.removeEventListener('scroll', onScroll);
-        performFadeOut();
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [hasEntered]);
 
   useEffect(() => {
     const handleAnchorClick = (e) => {
