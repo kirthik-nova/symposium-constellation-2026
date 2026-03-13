@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,11 +30,18 @@ const Navbar = () => {
         
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded bg-gradient-to-br from-fuchsia-400 to-purple-600 flex items-center justify-center text-black font-bold font-mono text-sm shadow-[0_0_15px_rgba(232,61,232,0.3)]">
-            {'>_'}
+          <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(232,61,232,0.2)] group-hover:border-fuchsia-500/50 transition-all duration-500">
+            <motion.img 
+              src="/favicon.png" 
+              alt="Constellation 2K26 Logo" 
+              className="w-full h-full object-cover scale-110" 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              whileHover={{ rotate: 360, transition: { duration: 3 } }}
+            />
           </div>
-          <span className="text-white font-heading text-lg font-bold tracking-wide">
-            Constellation<span className="text-gray-400 font-light ml-0.5">2K26</span>
+          <span className="text-white font-heading text-lg font-black tracking-tight group-hover:text-fuchsia-400 transition-colors duration-500">
+            CONSTELLATION<span className="text-white/30 font-light ml-0.5 group-hover:text-white/50 transition-colors">2K26</span>
           </span>
         </Link>
 
