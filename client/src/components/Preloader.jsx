@@ -137,12 +137,12 @@ const Preloader = ({ onComplete }) => {
   const [activeDept, setActiveDept] = useState(-1); // which dept is "highlighted" during intro
   const [visibleWords, setVisibleWords] = useState(0); // for word-by-word text reveal
   const [showSkip, setShowSkip] = useState(false);
-  const timersRef = useRef([]);
+  const timersRef = useRef([])
 
   useEffect(() => {
     const skipTimer = setTimeout(() => setShowSkip(true), 12000);
     return () => clearTimeout(skipTimer);
-  }, []);
+  }, [])
 
   const startSequence = () => {
     setGate(false);
