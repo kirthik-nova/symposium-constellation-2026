@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Instagram, Linkedin, Mail, MapPin, Phone, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -77,14 +78,14 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             className="flex flex-col lg:col-span-4 pr-4"
           >
-            <a href="#" className="flex items-center gap-2 mb-6 group w-fit">
+            <Link to="/" className="flex items-center gap-2 mb-6 group w-fit">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fuchsia-400 to-purple-600 flex items-center justify-center text-black font-bold font-mono text-lg shadow-[0_0_20px_rgba(232,61,232,0.3)] group-hover:scale-105 transition-transform duration-300">
                 {'>_'}
               </div>
               <span className="text-white font-heading text-3xl font-bold tracking-wide">
                 Constellation<span className="text-gray-400 font-light ml-0.5">2K26</span>
               </span>
-            </a>
+            </Link>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-8 font-light">
               Arunai Engineering College,<br />
               Mathur, Tiruvannamalai,<br />
@@ -113,10 +114,10 @@ const Footer = () => {
           >
             <h3 className="text-white font-heading text-lg font-bold mb-8 tracking-wide">Quick Links</h3>
             <ul className="space-y-4 font-mono text-sm text-gray-400">
-              <li><a href="#" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> Home</a></li>
-              <li><a href="#events" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> Events</a></li>
-              <li><a href="#schedule" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> Schedule</a></li>
-              <li><a href="#about" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> About</a></li>
+              <li><Link to="/" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> Home</Link></li>
+              <li><Link to="/events" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> Events</Link></li>
+              <li><Link to="/schedule" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> Schedule</Link></li>
+              <li><Link to="/about" className="hover:text-fuchsia-400 transition-colors flex items-center gap-3 group"><span className="text-fuchsia-500 w-1.5 h-1.5 rounded-full inline-block group-hover:scale-150 group-hover:shadow-[0_0_8px_#e83de8] transition-all" /> About</Link></li>
             </ul>
           </motion.div>
 

@@ -14,7 +14,7 @@ import Registration from './components/Registration';
 import TicketTracker from './components/TicketTracker';
 import TicketPage from './components/TicketPage';
 
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const MainPage = () => {
@@ -30,35 +30,44 @@ const MainPage = () => {
 
 
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const handleAnchorClick = (e) => {
-      const target = e.target.closest('a');
-      if (!target) return;
-      const href = target.getAttribute('href');
-      if (href === '#register' || href === '/#register') {
-        e.preventDefault();
-        setIsRegOpen(true);
-        return;
+    // Handle specific routes that open modals
+    if (location.pathname === '/register') {
+      setIsRegOpen(true);
+    } else if (location.pathname === '/track') {
+      setIsTrackerOpen(true);
+    }
+
+    // Handle section scrolling
+    const sections = ['events', 'schedule', 'about'];
+    const path = location.pathname.replace('/', '');
+    
+    if (sections.includes(path)) {
+      const el = document.getElementById(path);
+      if (el) {
+        // Short delay to ensure component is rendered
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
       }
-      if (href === '#track' || href === '/#track') {
-        e.preventDefault();
-        setIsTrackerOpen(true);
-        return;
-      }
-      if (href?.includes('#') && !href.startsWith('http')) {
-        const hash = href.split('#')[1];
-        if (hash && !['register', 'track'].includes(hash)) {
-          const el = document.getElementById(hash);
-          if (el) {
-            e.preventDefault();
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-      }
-    };
-    document.addEventListener('click', handleAnchorClick);
-    return () => document.removeEventListener('click', handleAnchorClick);
-  }, []);
+    } else if (location.pathname === '/' || location.pathname === '/home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [location.pathname]);
+
+  // Sync state back to URL when modals close
+  const handleRegClose = () => {
+    setIsRegOpen(false);
+    if (location.pathname === '/register') navigate('/');
+  };
+
+  const handleTrackerClose = () => {
+    setIsTrackerOpen(false);
+    if (location.pathname === '/track') navigate('/');
+  };
 
   return (
     <div className="min-h-screen bg-[#000000] text-white font-sans selection:bg-fuchsia-500/30 selection:text-white">
@@ -87,8 +96,8 @@ const MainPage = () => {
             <CountdownPoster />
             <Events />
             <Schedule />
-            <Registration isOpen={isRegOpen} onClose={() => setIsRegOpen(false)} />
-            <TicketTracker isOpen={isTrackerOpen} onClose={() => setIsTrackerOpen(false)} />
+            <Registration isOpen={isRegOpen} onClose={handleRegClose} />
+            <TicketTracker isOpen={isTrackerOpen} onClose={handleTrackerClose} />
             <About />
           </main>
 
@@ -103,6 +112,11 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
+      <Route path="/events" element={<MainPage />} />
+      <Route path="/schedule" element={<MainPage />} />
+      <Route path="/about" element={<MainPage />} />
+      <Route path="/register" element={<MainPage />} />
+      <Route path="/track" element={<MainPage />} />
       <Route path="/ticket" element={<TicketPage />} />
     </Routes>
   );

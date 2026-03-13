@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, ArrowRight, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight, Sparkles, Instagram, Linkedin, Mail, Phone, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import MagneticButton from './MagneticButton';
 import DepartmentConstellation from './DepartmentConstellation';
 
@@ -223,8 +224,8 @@ const Hero = ({ hasEntered }) => {
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start sm:items-center w-full">
             <motion.div {...getRevealProps(4.8)} className="w-full sm:w-auto">
               <MagneticButton className="w-full sm:w-auto block">
-                <a
-                  href="#events"
+                <Link
+                  to="/events"
                   className="group relative w-full sm:w-auto justify-center px-8 py-4
                              bg-white text-black font-bold text-base rounded-full overflow-hidden
                              transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]
@@ -233,14 +234,14 @@ const Hero = ({ hasEntered }) => {
                   <span className="relative z-10">Explore Events</span>
                   <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 group-hover:rotate-[-45deg] transition-all duration-300" />
                   <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-100 to-purple-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </a>
+                </Link>
               </MagneticButton>
             </motion.div>
 
             <motion.div {...getRevealProps(5.2)} className="w-full sm:w-auto">
               <MagneticButton className="w-full sm:w-auto block">
-                <a
-                  href="#schedule"
+                <Link
+                  to="/schedule"
                   className="group relative w-full sm:w-auto justify-center px-8 py-4
                              bg-transparent border border-white/20 text-white font-medium text-base rounded-full
                              transition-all hover:bg-white/5 hover:border-white/40
@@ -249,7 +250,7 @@ const Hero = ({ hasEntered }) => {
                   <span className="relative z-10">View Schedule</span>
                   <div className="absolute top-0 left-0 w-[2px] h-full bg-fuchsia-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-300" />
                   <div className="absolute bottom-0 left-0 w-full h-[2px] bg-fuchsia-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 delay-100" />
-                </a>
+                </Link>
               </MagneticButton>
             </motion.div>
           </div>
