@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'sonner';
-import { MessageCircle } from 'lucide-react';
 import Navbar from './components/Navbar';
 import NetworkBackground from './components/NetworkBackground';
 import ParticleBackground from './components/ParticleBackground';
