@@ -142,7 +142,7 @@ const Preloader = ({ onComplete }) => {
   useEffect(() => {
     const skipTimer = setTimeout(() => setShowSkip(true), 12000);
     return () => clearTimeout(skipTimer);
-  }, []);
+  }, [])
 
   const startSequence = () => {
     setGate(false);
